@@ -1,0 +1,155 @@
+---
+title: "Referee Report"
+output:
+  html_notebook: 
+    toc: no
+    code_folding: none
+  html_document: default
+  pdf_document: 
+    fig_height: 4
+    fig_width: 7
+    toc: yes
+echo: FALSE
+---
+
+<style type="text/css">
+.table {
+    width: inherit;
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+.math.display {
+  font-size: 28px;
+}
+</style>
+
+
+```{r global-options, include=FALSE}
+library(knitr)
+source('referee_data.R')
+
+name <- 'Kayser, William'
+username <- NULL
+password <- NULL
+
+friendly_name <- str_split_fixed(name, ", ", 2) %>% rev() %>% str_c(collapse=" ")
+
+games <- find_all_games(name, username, password)
+
+knitr::opts_chunk$set(fig.width=12, 
+                      fig.height=8, 
+                      fig.path='Figs/',
+                      echo=FALSE, 
+                      warning=FALSE, 
+                      message=FALSE)
+
+```
+
+## Summary
+
+`r nrow(games)` game were recorded with **`r friendly_name`** on the crew.
+
+```{r echo=F}
+games.total <- nrow(games)
+games.center <- nrow(filter(games, position == 'center'))
+games.ar1 <- nrow(filter(games, position == 'ar1'))
+games.ar2 <- nrow(filter(games, position == 'ar2'))
+games.ar <- games.ar1 + games.ar2
+games.solo <- nrow(filter(games, system == 'Single'))
+
+```
+
+* `r games.center` were Center assignments
+* `r games.solo` were Solo Center assignments
+* `r games.ar` were Assistant Referee assignments
+* `r games.ar1` were AR1 assignments
+* `r games.ar2` were AR2 assignments
+
+## Center Games
+
+```{r echo=F}
+by_level <- games %>% 
+    filter(position == 'center') %>%
+    group_by(gender, level) %>%
+    summarize(games = n()) %>%
+    as_tibble()
+```
+
+<style>
+ div#boys {
+    display: inline-block;
+    margin: 4px;
+ }
+ div#girls {
+    float: left;
+    margin: 4px;
+ }
+</style>
+
+
+```{r}
+girls <- filter(by_level, gender == 'Girls') %>% select(-gender) 
+boys <- filter(by_level, gender == 'Boys') %>% select(-gender) 
+```
+
+#### Girls (`r sum(girls$games)`){#girls}
+
+```{r}
+kable(girls)
+```
+
+#### Boys (`r sum(boys$games)`){#boys}
+
+```{r}
+kable(boys)
+```
+
+## Organizations
+
+```{r}
+table(games$org) %>% sort(TRUE) %>% kable(col.names=c('Org', 'No. of Games'))
+```
+
+## Teammates
+
+These are all referees appearing in game reports as part of your crew.
+
+
+```{r}
+
+teammates <- games %>%
+    select(-position) %>%
+    pivot_longer(c('center', 'ar1', 'ar2', 'assessor'), 
+                 values_to = 'referee', 
+                 names_to = 'position') %>%
+    filter(!is.na(referee) & referee != friendly_name & referee != "") %>%
+    # pivot_wider(names_from = position,
+    #             values_from = position,
+    #             values_fill = NA) %>%
+    arrange(date) %>%
+    group_by(referee) %>%
+    summarize(games = n(), 
+              last_game = strftime(last(date), "%b %d, %Y"),
+              location = last(field),
+              last_teams = last(str_c(home, ' vs ', away)),
+              center = sum(position=='center'),
+              ar1=sum(position=='ar1'),
+              ar2=sum(position=='ar2'),
+              assessor=sum(position=='assessor'))
+
+```
+
+### Top Five Partners
+
+```{r}
+
+teammates %>% 
+    arrange(desc(games), desc(center)) %>%
+    head(5) %>% kable()
+```
+
+### Complete Index by Name
+
+```{r}
+kable(teammates)
+```
