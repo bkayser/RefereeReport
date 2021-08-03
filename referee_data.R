@@ -4,13 +4,15 @@ library(rvest)
 # Utility functions to suspport reports
 
 # Make sure you call this the first time with the username and password arguments.  
-find_all_games <- function(referee, username=NULL, password=NULL) {
+# Return a list having the list of all games and the list of all referees.
+collect_ref_data <- function(referee_name, username=NULL, password=NULL) {
+    
     account_cache <- cache('accounts')
     
     if (!is.null(username) & !is.null(password)) {
-        account_cache$put(referee, list(username=username, password=password))
+        account_cache$put(referee_name, list(username=username, password=password))
     } else {
-        cached_credentials <- account_cache$get(referee)
+        cached_credentials <- account_cache$get(referee_name)
         if (is.null(cached_credentials)) {
             cached_credentials <- account_cache$get_first()
             warning('Using ", cached_credentials$username," credentials, information will be incomplete')
@@ -18,8 +20,50 @@ find_all_games <- function(referee, username=NULL, password=NULL) {
         username <- cached_credentials$username
         password <- cached_credentials$password
     }
-    game_cache <- cache('games', username)
+    session <- login(username, password)
 
+    orgs.all <- organizations(session)
+   
+    ref <- referee(session, orgs.all, referee_name)
+    
+    referee_id <- ref$referee_id
+    referee_name <- ref$referee_name
+    friendly_name <- ref$friendly_name
+    
+    #ordered_levels <- referees('level', orgs.all, session)
+    # 0,1080,2800,1,1841,4,2680,2820,2120,4420,3300,14,4520,4780,3560,3700,4160,4440,1100,1180,3221,12,4600
+    
+    games <- all_game_ids(session, orgs.all)
+    game_cache <- cache('games', username)
+    all_game_details = tibble()
+    for (game in games) {
+        details <- game_cache$get(game)
+        if (is.null(details)) {
+            Sys.sleep(1)
+            details <- game_details(session, game, friendly_name)   
+            game_cache$put(game, details)
+        }
+        all_game_details <- bind_rows(all_game_details, details)
+    }
+    
+    games <- all_game_details %>% 
+        mutate(
+            time = strptime(str_c(date, time, collaps=" "), "%a, %b %e, %Y %l:%M %p"),
+            upcoming = time >= Sys.time(),
+            org = as.factor(org),
+            field = as.factor(field),
+            system = as.factor(system),
+            city = as.factor(city),
+            position = factor(position, c('assessor', 'center', 'ar1', 'ar2'), ordered = T) %>% fct_drop(),
+            gender = factor(gender, c('Girls', 'Boys', 'Women', 'Mixed', 'Coed', 'Men', ordered = T)) %>% fct_drop(),
+            level = factor(level, ordered_levels, ordered = T) %>% fct_drop())
+        
+    return(list(games=games,
+                referees=referee_list(),
+                ref=ref$ref))
+}
+
+login <- function(username, password) {
     # Start Session by logging in
     session <- session("https://www.oregonsoccercentral.com")
     login_page <- session_jump_to(session, "https://www.oregonsoccercentral.com/OSICORE/login/login.php?lm=lo")
@@ -29,32 +73,29 @@ find_all_games <- function(referee, username=NULL, password=NULL) {
     if (response$response$status_code != 200) {
         stop("Failed to login: ", read_html(response))
     }
-    
+    return(session)
+}
+
+organizations <- function(session) {
     # Get the complete list of org ids
     orgs_page <- session_jump_to(session, "https://www.oregonsoccercentral.com/OSICORE/org/orgtree.php?chkbxs=true&affView=0")
     orglist <- html_elements(orgs_page, css = '#tree-0 li > input') 
-    orgs.all <- sapply(orglist, function(elem){
+    sapply(orglist, function(elem){
         html_attr(elem, 'id') %>% str_remove("check-") %>% as.integer()
-    }) %>% sort()
+    }) %>% 
+        sort() %>%
+        return()
     
-    referees <- lookup_refdata('referee', orgs.all, session)
-    referee_id <- referees[which(str_detect(names(referees), referee))][1]
-    if (is.na(referee_id)) {
-        stop("Cannot find id of ", referee)
-    }
-    referee <- names(referee_id)
-    friendly_name <- str_split_fixed(referee, ", ", 2) %>% rev() %>% str_c(collapse=" ")
-    
-    #ordered_levels <- lookup_refdata('level', orgs.all, session)
-    # 0,1080,2800,1,1841,4,2680,2820,2120,4420,3300,14,4520,4780,3560,3700,4160,4440,1100,1180,3221,12,4600
-    
+}
+
+all_game_ids <- function(session, orgs){
     page_size <- 1000
     game_search <- session_jump_to(session, "https://www.oregonsoccercentral.com/OSICORE/game/assignment.php")
     search_form <- html_form(game_search)[[1]] %>%
-        set_values(selOrgID=str_c(sort(orgs.all), collapse=','),
-                   dateFirst='1/1/2001',
-                   showResultsCount=page_size,
-                   refSearchOption = 'assigned')
+        html_form_set(selOrgID=str_c(sort(orgs), collapse=','),
+                      dateFirst='1/1/2001',
+                      showResultsCount=page_size,
+                      refSearchOption = 'assigned')
     
     response <- session_submit(session, search_form)
     
@@ -68,15 +109,11 @@ find_all_games <- function(referee, username=NULL, password=NULL) {
         as.integer()
     
     games <- setdiff(games, canceled_games)
-    
-    # games <- html_elements(response, css='#gameSearchTable > tbody > tr > td:nth-child(3)') %>%
-    #     lapply(html_text) %>%
-    #     as.integer()
     page <- 2
     while (last_fetch >= page_size) {
         next_page_url <- str_glue('https://www.oregonsoccercentral.com/OSICORE/game/results.php?showResultsPage=', page)
         response <- session_jump_to(session, next_page_url)
-
+        
         next_games <- html_elements(response, css='a[title^="click here"]') %>%
             lapply(html_text) %>%
             as.integer() 
@@ -87,35 +124,13 @@ find_all_games <- function(referee, username=NULL, password=NULL) {
             as.integer()
         
         next_games <- setdiff(next_games, canceled_games)
-
+        
         page <- page + 1   
         if (last_fetch > 0) {
             games <- rlist::list.append(games, next_games)
         }
     }
-    
-    all_game_details = tibble()
-    for (game in games) {
-        details <- game_cache$get(game)
-        if (is.null(details)) {
-            Sys.sleep(1)
-            details <- game_details(session, game, friendly_name)   
-            game_cache$put(game, details)
-        }
-        all_game_details <- bind_rows(all_game_details, details)
-    }
-    all_game_details %>% 
-        mutate(
-            date = strptime(str_c(date, time, collaps=" "), "%a, %b %e, %Y %l:%M %p") %>% as.Date(),
-            org = as.factor(org),
-            field = as.factor(field),
-            system = as.factor(system),
-            city = as.factor(city),
-            position = factor(position, c('assessor', 'center', 'ar1', 'ar2'), ordered = T) %>% fct_drop(),
-            gender = factor(gender, c('Girls', 'Boys', 'Women', 'Mixed', 'Coed', 'Men', ordered = T)) %>% fct_drop(),
-            level = factor(level, ordered_levels, ordered = T) %>% fct_drop()) %>% 
-        select(-time) %>%
-        return()
+    return(games)
 }
 
 game_details <- function(session, game, friendly_name) {
@@ -140,11 +155,11 @@ game_details <- function(session, game, friendly_name) {
     details <- list(
         gameID = game,
         date = date,
+        time = html_element(rows[3], css='td:nth-child(2)') %>% html_text(),
         org = html_element(rows[2], css='td:nth-child(4)') %>% html_text(),
         field = html_element(rows[4], css='td:nth-child(2)') %>% html_text(),
         system = html_element(rows[4], css='td:nth-child(4)') %>% html_text(),
         city = html_element(rows[6], css='td:nth-child(2)') %>% html_text(),
-        time = html_element(rows[3], css='td:nth-child(2)') %>% html_text(), 
         home = html_element(rows[7], css='td:nth-child(2)') %>% html_text(),
         away = html_element(rows[7], css='td:nth-child(4)') %>% html_text()
     )
@@ -217,24 +232,115 @@ cache <- function(name='cache', namespace=NULL) {
                 get_first = get_first))
 }
 
-lookup_refdata <- function(type, 
-                           org_ids,
-                           session) {
-    # Get the reference data for type = level, referee
-    resp <- httr::POST("https://www.oregonsoccercentral.com/OSICORE/game/ajax.php", 
-                       encode="form",
-                       body=list(action= "lookUpSearchField",
-                                 type=type,
-                                 orgIDs=str_c(org_ids, collapse=",")),
-                       config=session$config,
-                       handle = session$handle)
-    results <- c()
-    for (entry in html_elements(httr::content(resp), css=type)) {
-        name = html_element(entry, css="value") %>% html_text()
-        id = html_element(entry, css="id") %>% html_text() %>% as.integer()
-        results[name] = id
+## Referee Info
+
+# Return the spreadsheet DB of referees
+referee_database <- function() {
+    dir(pattern="Referee Data.*") %>% 
+        sort() %>%
+        first() %>%
+        readxl::read_xlsx() %>%
+        rename_with(~ str_remove_all(.x, ' ')) %>% # Strip spaces from columns
+        mutate(RefereeType=factor(RefereeType, ordered = T, levels = c("Grassroots Futsal Referee",
+                                                                       "Grassroots Referee",
+                                                                       "Regional Emeritus Referee",
+                                                                       "Regional Referee",
+                                                                       "National Assistant Referee",
+                                                                       "National Referee",          
+                                                                       "National Emeritus Referee")),
+               Gender=factor(str_to_upper(Gender)),
+               Birthdate=as.Date(Birthdate),
+               ApprovedDate=as.Date(ApprovedDate),
+               FullName=str_c(FirstName, ' ', LastName),
+               CanonicalName = str_to_upper(FullName),
+               CreatedDate=as.Date(CreatedDate)) %>%
+        filter(RefereeType != 'Grassroots Futsal Referee') %>%
+        rename(RegID=`RefereeID`) %>%
+        mutate(dup = duplicated(CanonicalName)) %>%
+        filter(!dup) %>%
+        select(-dup) %>%
+        return()
+}
+
+# Return the list of all referees for selection joined with the referee database
+# The complete referee list may not have the details from the spreadsheet of active refs
+referee_list <- function(session, org_ids) {
+    misc_cache <- cache('misc')
+    refs <- misc_cache$get('referees')
+    if (is.null(refs)) {
+        # Get the reference data for type = level, referee
+        resp <- httr::POST("https://www.oregonsoccercentral.com/OSICORE/game/ajax.php", 
+                           encode="form",
+                           body=list(action= "lookUpSearchField",
+                                     type='referee',
+                                     orgIDs=str_c(org_ids, collapse=",")),
+                           config=session$config,
+                           handle = session$handle)
+        refs <- tibble()
+        for (entry in html_elements(httr::content(resp), css='referee')) {
+            refs <- bind_rows(refs,
+                              list(name = html_text(html_element(entry, css="value")),
+                                   id = as.integer(html_text(html_element(entry, css="id")))))
+            
+            
+        }
+        refs <- bind_cols(refs,
+                          as_tibble(str_split_fixed(refs$name, ", ", 2)))
+        names(refs) <- c('Name', 'ID', 'LastName', 'FirstName')
+        refs <- mutate(refs,
+                       FriendlyName =  str_c(FirstName, ' ', LastName),
+                       CanonicalName = str_to_upper(FriendlyName))
+        
+        misc_cache$put('referees', refs)
     }
-    return(results)
+      
+    referee_database() %>%
+        select(-LastName, -FirstName) %>%
+        right_join(refs, by='CanonicalName') %>%
+        return()    
+}
+referee <- function(session,
+                    org_ids,
+                    referee_name) {
+    referee_id <- NULL
+    refs <- referee_list(session, org_ids)
+    ref <- filter(refs, Name == referee_name)
+    if (is_empty(ref)) {
+        stop("Cannot find id of ", referee_name)
+    }
+    referee_name <- ref$Name
+    return(list(referee_id = ref$ID,
+                referee_name = ref$Name,
+                friendly_name = ref$FriendlyName,
+                ref = ref))
+}
+
+make_vcs <- function(name, username = NULL, password = NULL) {
+    db <- collect_ref_data(name, username, password)
+    upcoming <- filter(db$games, upcoming)
+    filename <- str_c(db$ref$FirstName,'-games.vcs')
+    sink(filename)
+    cat("BEGIN:VCALENDAR\n")
+    for (i in 1:nrow(upcoming)) {
+        cat(sep="", "BEGIN:VEVENT\n")
+        cat(sep="", "SUMMARY:", db$ref$FirstName, " @ ", as.character(upcoming$field[i]), "\n")
+        cat(sep="", "LOCATION:", as.character(upcoming$field[i]), "\n")
+        cat(sep="", "DTSTART:", strftime(upcoming$time[i], "%Y%m%dT%H%M%00"), "\n")
+        cat("DURATION:PT1H0M0S\n")  
+
+        crew <- t(select(upcoming[i,], center, ar1, ar2, assessor))[,1]
+        crew <- crew[!is.na(crew) & crew != ""]
+
+        cat(sep="", 
+            "DESCRIPTION:Game #", upcoming$gameID[i]," for ", as.character(upcoming$org[i]), "\\n",
+            "Position: ", str_to_upper(upcoming$position[i]), "\\n", 
+            str_c(str_to_upper(names(crew)), crew, sep=": ", collapse="\\n"), "\\n",
+            "Home: ", upcoming$home[i], "\\n",
+            "Visitor: ", upcoming$away[i], "\n")
+        cat("END:VEVENT\n")
+    }
+    cat("END:VCALENDAR\n")
+    sink(NULL)
 }
 
 ordered_levels <- c('n/a',

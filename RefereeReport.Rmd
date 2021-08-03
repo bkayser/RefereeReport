@@ -28,20 +28,25 @@ echo: FALSE
 library(knitr)
 source('referee_data.R')
 
-name <- 'Kayser, William'
+name <- 'Kayser, Bill'
 username <- NULL
 password <- NULL
 
 friendly_name <- str_split_fixed(name, ", ", 2) %>% rev() %>% str_c(collapse=" ")
 
-games <- find_all_games(name, username, password)
+db <- collect_ref_data(name, username, password)
+all_games <- db$games %>% split(.$upcoming)
 
+games <- all_games[["FALSE"]]
+upcoming <- all_games[["TRUE"]]
+options(knitr.kable.NA = '')
 knitr::opts_chunk$set(fig.width=12, 
                       fig.height=8, 
                       fig.path='Figs/',
                       echo=FALSE, 
                       warning=FALSE, 
                       message=FALSE)
+
 
 ```
 
@@ -65,7 +70,7 @@ games.solo <- nrow(filter(games, system == 'Single'))
 * `r games.ar1` were AR1 assignments
 * `r games.ar2` were AR2 assignments
 
-## Center Games
+## Center Games{#centers}
 
 ```{r echo=F}
 by_level <- games %>% 
@@ -78,11 +83,19 @@ by_level <- games %>%
 <style>
  div#boys {
     display: inline-block;
-    margin: 4px;
+    margin: 4px 4px 4px 12px;
  }
  div#girls {
     float: left;
     margin: 4px;
+ }
+ div#centers {
+    float: left;
+    margin: 4px;
+ }
+ div#organizations {
+    display: inline-block;
+    margin: 4px 4px 4px 32px;
  }
 </style>
 
@@ -118,24 +131,38 @@ These are all referees appearing in game reports as part of your crew.
 ```{r}
 
 teammates <- games %>%
-    select(-position) %>%
-    pivot_longer(c('center', 'ar1', 'ar2', 'assessor'), 
-                 values_to = 'referee', 
-                 names_to = 'position') %>%
-    filter(!is.na(referee) & referee != friendly_name & referee != "") %>%
-    # pivot_wider(names_from = position,
-    #             values_from = position,
-    #             values_fill = NA) %>%
-    arrange(date) %>%
-    group_by(referee) %>%
-    summarize(games = n(), 
-              last_game = strftime(last(date), "%b %d, %Y"),
-              location = last(field),
-              last_teams = last(str_c(home, ' vs ', away)),
-              center = sum(position=='center'),
-              ar1=sum(position=='ar1'),
-              ar2=sum(position=='ar2'),
-              assessor=sum(position=='assessor'))
+  select(-position) %>%
+  pivot_longer(c('center', 'ar1', 'ar2', 'assessor'), 
+               values_to = 'referee', 
+               names_to = 'position') %>%
+  filter(!is.na(referee) & referee != friendly_name & referee != "") %>%
+  # pivot_wider(names_from = position,
+  #             values_from = position,
+  #             values_fill = NA) %>%
+  arrange(date) %>%
+  group_by(referee) %>%
+  summarize(games = n(), 
+            last_game = last(date),
+            location = last(field),
+            last_teams = last(str_c(home, ' vs ', away)),
+            center = sum(position=='center'),
+            ar1=sum(position=='ar1'),
+            ar2=sum(position=='ar2'),
+            assessor=sum(position=='assessor')) %>%
+  mutate(CanonicalName = str_to_upper(referee))  %>%
+  left_join(db$referees, by=c("CanonicalName")) %>%
+  mutate(Age = as.numeric(floor( as.numeric(Sys.Date() - Birthdate, unit="days")/365.25))) %>%
+  select(Full_Name=referee,
+         Games=games,
+         Last_Game=last_game,
+         Location=location,
+         Last_Teams=last_teams,
+         Center=center,
+         AR1=ar1,
+         AR2=ar2,
+         Assessor=assessor,
+         RefereeType,
+         Age)
 
 ```
 
@@ -144,7 +171,7 @@ teammates <- games %>%
 ```{r}
 
 teammates %>% 
-    arrange(desc(games), desc(center)) %>%
+    arrange(desc(Games), desc(Center)) %>%
     head(5) %>% kable()
 ```
 
