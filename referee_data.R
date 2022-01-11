@@ -14,8 +14,7 @@ collect_ref_data <- function(referee_name, username=NULL, password=NULL) {
     } else {
         cached_credentials <- account_cache$get(referee_name)
         if (is.null(cached_credentials)) {
-            cached_credentials <- account_cache$get_first()
-            warning('Using ", cached_credentials$username," credentials, information will be incomplete')
+            stop('No cached credentials for ', referee_name, '.')
         }
         username <- cached_credentials$username
         password <- cached_credentials$password
@@ -25,6 +24,9 @@ collect_ref_data <- function(referee_name, username=NULL, password=NULL) {
     orgs.all <- organizations(session)
    
     ref <- referee(session, orgs.all, referee_name)
+    if (is_empty(ref$referee_name)) {
+      stop("Could not find ref with name ", referee_name)
+    }
     
     referee_id <- ref$referee_id
     referee_name <- ref$referee_name
@@ -95,7 +97,8 @@ all_game_ids <- function(session, orgs){
         html_form_set(selOrgID=str_c(sort(orgs), collapse=','),
                       dateFirst='1/1/2001',
                       showResultsCount=page_size,
-                      refSearchOption = 'assigned')
+                      refSearchOption = 'assigned') %>%
+      suppressWarnings()
     
     response <- session_submit(session, search_form)
     
@@ -220,16 +223,9 @@ cache <- function(name='cache', namespace=NULL) {
     put <- function(id, data) {
         saveRDS(data, filename(id))
     }
-    get_first <- function() {
-        entries <- dir(cachedir())
-        if (length(entries) == 0) {
-            stop("Need at least one entry in ", cachedir())
-        }
-    }
     
     return(list(get = get, 
-                put = put,
-                get_first = get_first))
+                put = put))
 }
 
 ## Referee Info
@@ -313,34 +309,6 @@ referee <- function(session,
                 referee_name = ref$Name,
                 friendly_name = ref$FriendlyName,
                 ref = ref))
-}
-
-make_vcs <- function(name, username = NULL, password = NULL) {
-    db <- collect_ref_data(name, username, password)
-    upcoming <- filter(db$games, upcoming)
-    filename <- str_c(db$ref$FirstName,'-games.vcs')
-    sink(filename)
-    cat("BEGIN:VCALENDAR\n")
-    for (i in 1:nrow(upcoming)) {
-        cat(sep="", "BEGIN:VEVENT\n")
-        cat(sep="", "SUMMARY:", db$ref$FirstName, " @ ", as.character(upcoming$field[i]), "\n")
-        cat(sep="", "LOCATION:", as.character(upcoming$field[i]), "\n")
-        cat(sep="", "DTSTART:", strftime(upcoming$time[i], "%Y%m%dT%H%M%00"), "\n")
-        cat("DURATION:PT1H0M0S\n")  
-
-        crew <- t(select(upcoming[i,], center, ar1, ar2, assessor))[,1]
-        crew <- crew[!is.na(crew) & crew != ""]
-
-        cat(sep="", 
-            "DESCRIPTION:Game #", upcoming$gameID[i]," for ", as.character(upcoming$org[i]), "\\n",
-            "Position: ", str_to_upper(upcoming$position[i]), "\\n", 
-            str_c(str_to_upper(names(crew)), crew, sep=": ", collapse="\\n"), "\\n",
-            "Home: ", upcoming$home[i], "\\n",
-            "Visitor: ", upcoming$away[i], "\n")
-        cat("END:VEVENT\n")
-    }
-    cat("END:VCALENDAR\n")
-    sink(NULL)
 }
 
 ordered_levels <- c('n/a',

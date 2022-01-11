@@ -1,14 +1,14 @@
 ---
 title: "Referee Report"
 output:
-  html_notebook: 
-    toc: no
-    code_folding: none
-  html_document: default
   pdf_document: 
     fig_height: 4
     fig_width: 7
     toc: yes
+  html_notebook: 
+    toc: no
+    code_folding: none
+  html_document: default
 echo: FALSE
 ---
 
@@ -25,7 +25,9 @@ echo: FALSE
 
 
 ```{r global-options, include=FALSE}
-library(knitr)
+library(tidyverse)
+library(knitr) %>% suppressWarnings()
+theme_set(theme_light())
 source('referee_data.R')
 
 name <- 'Kayser, Bill'
@@ -69,6 +71,33 @@ games.solo <- nrow(filter(games, system == 'Single'))
 * `r games.ar` were Assistant Referee assignments
 * `r games.ar1` were AR1 assignments
 * `r games.ar2` were AR2 assignments
+
+```{r, fig.width=10, fig.height=4}
+games_by_month <- games %>% 
+  mutate(m = lubridate::month(time),
+         y = lubridate::year(time),
+         period = (y-2017)*12 + m,
+         month = str_c(m,"/",y%%100),
+         date = lubridate::my(month)) %>%
+  select(period, month, date, org) %>%
+#  group_by(period, org, month) %>%
+#  summarize(count=n()) %>%
+  as_tibble()
+
+period.val <- min(games_by_month$period):max(games_by_month$period)
+period.month <- str_c((period.val %% 12) + 1, '/', 17 + (period.val %/% 12))
+
+games_by_month$month <- factor(games_by_month$month, period.month)
+
+ggplot(games_by_month) +
+  aes(x=date, fill=org) +
+  geom_bar() +
+  scale_x_date(date_breaks = '3 months', date_labels = '%m/%y') +
+  xlab('Month') +
+  ylab('Number of Assignments') +
+  ggtitle('Assignment History')
+
+```
 
 ## Center Games{#centers}
 

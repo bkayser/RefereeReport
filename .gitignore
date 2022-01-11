@@ -41,3 +41,7 @@ vignettes/*.pdf
 cache/
 RefereeReport.nb.*
 *.xls*
+*.vcs
+Figs/
+*.pdf
+*.html
