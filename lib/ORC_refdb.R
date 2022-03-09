@@ -4,10 +4,10 @@ library(rvest)
 # Return the spreadsheet DB of referees
 referee_database.2022 <- function() {
     refs <- 
-        # dir("RefereeList", "Referee_Licenses_*", full.names=T) |> 
+        # dir("data", "Referee_Licenses_*", full.names=T) |> 
         # sort() |>
         # first() |>
-        read_csv("RefereeList/ActiveRefereeLicenses_3-1-2022.csv", show_col_types = FALSE) |>
+        read_csv("data/ActiveRefereeLicenses_3-1-2022.csv", show_col_types = FALSE) |>
         rename(ID=`USSF-Id`,
                Apt=`Apt/suite/unit`) |>
         mutate(DOB=lubridate::mdy(DOB)) |>
@@ -18,7 +18,7 @@ referee_database.2022 <- function() {
 # Return the spreadsheet DB of referees
 referee_database.2021 <- function() {
     refs <-
-        readxl::read_xlsx("RefereeList/Referee Data 2021-06-30.xlsx") |>
+        readxl::read_xlsx("data/Referee Data 2021-06-30.xlsx") |>
         rename(License=`Referee Type`,
                ID=`Referee ID`,
                DOB=Birthdate,

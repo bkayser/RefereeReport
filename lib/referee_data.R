@@ -233,7 +233,7 @@ cache <- function(name='cache', namespace=NULL) {
 # Moved to ORC_refdb and with different column names.  :-(
 # # Return the spreadsheet DB of referees
 # referee_database <- function() {
-#     refs <- dir("RefereeList", "RefereeList*", full.names=T) |> 
+#     refs <- dir("data", "data*", full.names=T) |> 
 #         sort() |>
 #         first() |>
 #         read_csv(show_col_types = FALSE) |>
