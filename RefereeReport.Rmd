@@ -201,7 +201,7 @@ teammates <- games %>%
 
 teammates %>% 
     arrange(desc(Games), desc(Center)) %>%
-    head(5) %>% kable()
+    head(10) %>% kable()
 ```
 
 ### Complete Index by Name

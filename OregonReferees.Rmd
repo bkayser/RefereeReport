@@ -1,0 +1,332 @@
+---
+title: "Oregon Referee Report"
+always_allow_html: true
+output:
+  html_notebook: 
+    code_folding: none
+    theme: readable
+    css: referee_style.css
+    fig_width: 12
+    fig_height: 6
+    fig_caption: yes
+  html_document: 
+    code_folding: none
+    theme: readable
+    css: referee_style.css
+  pdf_document: 
+    fig_height: 8
+    fig_width: 12
+echo: FALSE
+---
+
+<style type="text/css">
+.table {
+    width: inherit;
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+.math.display {
+  font-size: 28px;
+}
+</style>
+
+
+```{r global-options, include=FALSE}
+library(tidyverse)
+library(gridExtra)
+library(kableExtra)
+library(scales)
+library(knitr) %>% suppressWarnings()
+knitr::opts_chunk$set(echo=F)
+theme_set(theme_light())
+source('./lib/ncsc_refs.R')
+
+username <- NULL
+password <- NULL
+
+
+db.21 <- referee_database.2021()
+db.22 <- referee_database.2022()
+referees <- ungroup(filter(db.22, !is.na(Referee)))
+
+```
+## Breakdown of Officials
+
+We have a substantial number of referees under the age of 20 with solid representation of women, however the data suggests a substantial attrition with women disproportionately dropping out.
+
+```{r younger, fig.width=6, fig.height=2}
+
+g1 <- ggplot(referees) +
+    aes(x=Age, fill=Gender) +
+    geom_histogram(breaks = 2.5 + 5*(2:15), color='black', size=0.25) +
+    scale_x_continuous(breaks = 5*(2:15)) +
+    ylab("Number of Referees") +
+    ggtitle("Number of Registered Referees by Age",
+            subtitle="Grouped by five years")
+
+g2 <- filter(referees, Age <= 25) |>
+    ggplot() +
+    aes(x=Age, fill=Gender) +
+    geom_histogram(binwidth=1, color='black', size=0.25, show.legend = F) +
+    ylab("Number of Referees") +
+    scale_x_continuous(breaks=13:25) +
+    ggtitle("Young Referees Year to Year") +
+    ylab(NULL)
+
+grid.arrange(g1, g2, ncol=2)
+
+```
+
+```{r mapinfo} 
+map_theme <- theme_bw() +
+    theme(axis.text=element_blank(),
+          axis.ticks=element_blank(),
+          line=element_blank(),
+          plot.background=element_rect(fill='#EEEEEE', size=1, color='#666666'),
+          legend.background=element_rect(fill='#E9E9E9',size=0))
+
+
+portland_metro <- c('Portland', 'Wilsonville', 'Forest Grove', 'Beaverton', 'Oregon City')
+statewide <- c('Portland', 'Medford', 'Roseburg', 'Bend', 'Salem', 'Eugene')
+cities.or <- read.csv('uscities.csv') |>
+    filter(state_id=='OR') |>
+    filter(city %in% c(portland_metro, statewide))
+
+cities.statewide <- filter(cities.or, city %in% statewide)
+cities.metro <- filter(cities.or, city %in% portland_metro)
+
+```
+
+## Locations of Registered Officials
+
+```{r reflocs, fig.height=5, fig.width=9}
+counts <- group_by(referees, Zip) |> summarize(count = n())
+
+# Use tigris lib to get Zip info in sf form
+options(tigris_use_cache = TRUE)
+
+# Get zipcodes and join with referee counts by Zip.
+Zipcodes.sf <- suppressMessages(sf::st_as_sf(tigris::zctas(year=2010, cb = F, state='OR')))
+RefsByZipcodes.sf <- merge(Zipcodes.sf, counts, by.y='Zip', by.x='ZCTA5CE10')
+
+# Get outline of Oregon
+states <- suppressMessages(tigris::states(cb=T, class='sf'))
+Oregon.sf <- sf::st_geometry(filter(states, NAME=='Oregon'))
+
+rev_sqrt_trans <- function() {
+    scales::trans_new(
+        name = "rev_sqrt", 
+        transform = function(x) -sqrt(abs(x)), 
+        inverse = function(x) x^2,
+        domain = c(0, Inf))
+}
+
+refs.statewide <- ggplot(cities.statewide) +
+    geom_sf(data=Oregon.sf) + 
+    geom_sf(data=RefsByZipcodes.sf, 
+            aes(fill = count), alpha=0.8) +
+    geom_point(aes(x=lng, y=lat),
+               color='green',
+               size=2,
+               alpha=0.7,
+               show.legend = F) +
+    geom_label(aes(x=lng, y=lat, label=city, size=population), 
+               show.legend = F,
+              nudge_x=0.2, 
+              alpha=0.5,
+              color='black', 
+              fontface='bold',
+              hjust='left',
+              label.r=unit(0.4, 'lines'),
+              label.size=0) +
+    xlab(NULL) + ylab(NULL) +
+    scale_size_continuous(name='size', range=c(4,7)) +
+    scale_fill_viridis_c(option = "plasma", trans =  "rev_sqrt", name="Count")+
+    ggtitle("Oregon Referees", subtitle = "Count by zip code") +
+    map_theme
+
+refs.portland <- ggplot(cities.metro) +
+    geom_sf(data=Oregon.sf) + 
+    geom_sf(data=RefsByZipcodes.sf, aes(fill = count), 
+            alpha=0.8) +
+    # geom_point(aes(x=lng, y=lat),
+    #            color='green',
+    #            size=2,
+    #            alpha=0.7,
+    #            show.legend = F) +
+    geom_label(aes(x=lng, y=lat, label=city, size=population), 
+               show.legend = F,
+               nudge_x=0.02, 
+               alpha=0.5,
+               color='black', 
+               fontface='bold',
+              label.r=unit(0.4, 'lines'),
+              label.size=0) +
+    xlab(NULL) + ylab(NULL) +
+    scale_size_continuous(name='size', range=c(4,9)) +
+    scale_y_continuous(limits=c(45.15, 45.80)) + scale_x_continuous(limits=c(-123.3, -122.05)) +
+    scale_fill_viridis_c(option = "plasma", trans =  "rev_sqrt", name="Count")+
+    ggtitle("Portland Area Referees",  subtitle = "Count by zip code") +
+    map_theme
+
+grid.arrange(refs.statewide, refs.portland, 
+             ncol=2)
+```
+
+### Mentors and Instructors
+
+```{r mentorsmap, fig.height=5, fig.width=9}
+mentors <- filter(db.22, !is.na(Mentor) | !is.na(Assessor) | !is.na(Instructor))
+counts <- group_by(mentors, Zip) |> summarize(count = as.integer(n()))
+
+MentorsByZipcodes.sf <- merge(Zipcodes.sf, counts, by.y='Zip', by.x='ZCTA5CE10')
+
+fill_colors <- c(`1`='#FFCCCC', `2`='#DD6666', `3`='#CC4444', `4`='#AA1111')[1:max(counts$count)]
+
+mentors.statewide <- ggplot(cities.statewide) +
+    geom_sf(data=Oregon.sf) + 
+    geom_sf(data=MentorsByZipcodes.sf, 
+            aes(fill = factor(count)), alpha=0.8) +
+     geom_label(aes(x=lng, y=lat, label=city, size=population), 
+               show.legend = F,
+              nudge_x=0.2, 
+              alpha=0.5,
+              color='black', 
+              fontface='bold',
+              hjust='left',
+              label.r=unit(0.4, 'lines'),
+              label.size=0) +
+    xlab(NULL) + ylab(NULL) +
+    scale_size_continuous(name='size', range=c(4,7)) +
+    scale_fill_manual(values=fill_colors, name="Count") +
+    ggtitle("Statewide Mentors, Assessors and Instructors", 
+            subtitle = "Count of by zip code") +
+    map_theme
+
+mentors.metro <- ggplot(cities.metro) +
+    geom_sf(data=Oregon.sf) + 
+    geom_sf(data=MentorsByZipcodes.sf, aes(fill = factor(count)), 
+            alpha=0.8) +
+    geom_label(aes(x=lng, y=lat, label=city, size=population), 
+               show.legend = F,
+              nudge_x=0.02, 
+              alpha=0.5,
+              color='black', 
+              fontface='bold',
+              label.r=unit(0.4, 'lines'),
+              label.size=0) +
+     xlab(NULL) + ylab(NULL) +
+    scale_size_continuous(name='size', range=c(4,9)) +
+    scale_y_continuous(limits=c(45.15, 45.80)) + scale_x_continuous(limits=c(-123.3, -122.05)) +
+    scale_fill_manual(values=fill_colors, name="Count") +
+    ggtitle("Portland Area Mentors, Assessors and Instructors", 
+            subtitle = "Count by zip code") +
+    map_theme
+
+grid.arrange(mentors.statewide, mentors.metro, 
+             ncol=2)
+```
+
+# Oldest and Youngest
+
+Here are the oldest and youngest referees.
+
+
+<div id="toplists">
+```{r top.oldest}
+
+arrange(referees, desc(Age)) |>
+    head(20) |>
+    mutate(DOB = strftime(DOB, '%b %Y')) |>
+    select(`Full Name`=FullName, Born=DOB, Age, Referee) |>
+    kbl( # 'html', 
+        escape=FALSE, 
+        caption="Twenty Oldest Referees") |>
+#    column_spec(1, width = "12em") |>
+    kable_styling(bootstrap_options = c("striped", "hover"), full_width = F) 
+
+```
+
+
+```{r top.youngest}
+
+arrange(referees, Age) |>
+    head(20) |>
+    mutate(DOB = strftime(DOB, '%b %Y')) |>
+    select(`Full Name`=FullName, Born=DOB, Age) |>
+    kbl(escape=FALSE, caption = "Twenty Youngest Referees") |>
+#    column_spec(1, width = "12em") |>
+    kable_styling(bootstrap_options = c("striped", "hover"), full_width = F) 
+
+```
+</div>
+
+
+## Year Over Year Analysis
+
+I don't know if this is valid but I compared the registered referees from mid-2021 to the current list.
+
+```{r historical}
+count.current <- nrow(db.22) 
+count.previous <- nrow(db.21) 
+count.renewed <- length(intersect(db.21$ID, db.22$ID))
+percent.renewed <- count.renewed/count.current
+count.new <- length(setdiff(db.22$ID, db.21$ID))
+count.unrenewed <- length(setdiff(db.21$ID, db.22$ID))
+
+```
+
+In 2021, a total of `r comma(count.previous)` officials registered.
+
+In 2022, so far `r comma(count.current)` officials have registered.
+
+`r comma(count.renewed)` or `r percent(percent.renewed)` have at least partially renewed their registrations.
+
+`r comma(count.unrenewed)` officials have yet to update their registration in 2022.
+
+This year, there are *`r comma(count.new)`* officials who are either new or did not register in 2021.
+
+```{r historical_breakdown}
+
+db.21$Renewed <- db.21$ID %in% db.22$ID
+
+refstatus <- db.21 |>
+    mutate(Renewed = ID %in% db.22$ID,
+           AgeGroup = ifelse(Age < 16, 'U15',
+                             ifelse(Age < 19, 'U19', 'Adult'))) |>
+    group_by(Gender, AgeGroup) |>
+    summarize(Total=n(), Renewed=sum(Renewed)) |>
+    pivot_longer(all_of(c('Total', 'Renewed')),
+                 names_to='Registered',
+                 values_to='Count') |>
+    mutate(AgeGroup = factor(AgeGroup, levels=c('U15', 'U19', 'Adult')),
+           Registered = factor(Registered, levels=c('Total', 'Renewed')))
+unspecified_gender <- filter(refstatus, Gender == 'U') |> pull(Count) |> sum()
+```
+
+In analyzing the attrition by gender, it turns out a substantial number of referees are registered without a gender 
+(`r unspecified_gender`).  This seems to be some error in data collection since this phenomenon is not reflected in 2022 data.
+
+So this graph is filtered for referees registered with a gender.
+
+```{r attrition_bygender}
+
+filter(refstatus, Gender != 'U') |>            
+ggplot() +
+    aes(y=Count, x=Gender, fill=Registered) +
+    geom_col(position='dodge') +
+    scale_fill_discrete(labels=c("Registered 2021", "Renewed")) +
+    labs(fill=NULL, title="Registrations by Gender") +
+    ylab('Registered Count')
+```
+
+Dividing registrations into age groups you can see the biggest drop off in re-registering seems to be referees between 15 and 18 years old.
+
+```{r attrition_byage}
+ggplot(refstatus) +
+    aes(y=Count, x=AgeGroup, fill=Registered) +
+    geom_col(position='dodge') +
+    scale_fill_discrete(labels=c("Registered 2021", "Renewed")) +
+    labs(fill=NULL, title="Registrations by Age Group") +
+    ylab('Registered Count') 
+```
