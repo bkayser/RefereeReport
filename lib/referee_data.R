@@ -1,25 +1,19 @@
 library(tidyverse)
 library(rvest)
-
+source('lib/utils.R')
 # Utility functions to suspport reports
 
 # Make sure you call this the first time with the username and password arguments.  
 # Return a list having the list of all games and the list of all referees.
+#
+# For the given ref, returns a list of:
+#   Games recorded by the ref
+#   Table of referees who have worked with this ref
+#   Summary of the ref.
+#
 collect_ref_data <- function(referee_name, username=NULL, password=NULL) {
     
-    account_cache <- cache('accounts')
-    
-    if (!is.null(username) & !is.null(password)) {
-        account_cache$put(referee_name, list(username=username, password=password))
-    } else {
-        cached_credentials <- account_cache$get(referee_name)
-        if (is.null(cached_credentials)) {
-            stop('No cached credentials for ', referee_name, '.')
-        }
-        username <- cached_credentials$username
-        password <- cached_credentials$password
-    }
-    session <- login(username, password)
+    session <- create_session(username, password)
 
     orgs.all <- organizations(session)
    
@@ -65,18 +59,6 @@ collect_ref_data <- function(referee_name, username=NULL, password=NULL) {
                 ref=ref$ref))
 }
 
-login <- function(username, password) {
-    # Start Session by logging in
-    session <- session("https://www.oregonsoccercentral.com")
-    login_page <- session_jump_to(session, "https://www.oregonsoccercentral.com/OSICORE/login/login.php?lm=lo")
-    form <- html_form(login_page)[[1]] |>
-        html_form_set(username=username, password=password) 
-    response <- session_submit(session, form)
-    if (response$response$status_code != 200) {
-        stop("Failed to login: ", read_html(response))
-    }
-    return(session)
-}
 
 organizations <- function(session) {
     # Get the complete list of org ids
@@ -197,71 +179,7 @@ game_details <- function(session, game, friendly_name) {
     }
     return(details)
 }
-cache <- function(name='cache', namespace=NULL) {
-   
-    cachedir <- function() {
-        d <- str_glue('cache/',name)
-        if (!is.null(namespace)) {
-            d <- str_glue(d, '/{namespace}')
-        }
-        return(d)
-    }
-    filename <- function(id) {
-        return(str_glue(cachedir(), '/{id}.RDS'))
-    }    
-    if (!dir.exists(cachedir())) {
-        dir.create(cachedir(), recursive = T)
-    }
-    get <- function(id) {
-        f <- filename(id)
-        if (file.exists(f)) {
-            return(readRDS(f))
-        } else {
-            return(NULL)
-        }
-    }
-    put <- function(id, data) {
-        saveRDS(data, filename(id))
-    }
-    
-    return(list(get = get, 
-                put = put))
-}
 
-## Referee Info
-
-# Moved to ORC_refdb and with different column names.  :-(
-# # Return the spreadsheet DB of referees
-# referee_database <- function() {
-#     refs <- dir("data", "data*", full.names=T) |> 
-#         sort() |>
-#         first() |>
-#         read_csv(show_col_types = FALSE) |>
-#         rename_with(~ str_remove_all(.x, ' ')) |> # Strip spaces from columns 
-#         rename(RefereeType=License,               # New format
-#                Birthdate=DOB,
-#                ApprovedDate=Issuedate,
-#                LastName=Lastname,
-#                FirstName=Firstname) |>
-#         mutate(RefereeType=factor(RefereeType, ordered = T, levels = c("Grassroots Futsal Referee",
-#                                                                    "Grassroots Referee",
-#                                                                    "Regional Emeritus Referee",
-#                                                                    "Regional Referee",
-#                                                                    "National Assistant Referee",
-#                                                                    "National Referee",          
-#                                                                    "National Emeritus Referee")),
-#                Gender=factor(str_to_upper(Gender)),
-#                Birthdate=lubridate::mdy(Birthdate),
-#                ApprovedDate=lubridate::mdy(ApprovedDate),
-#                FullName=str_c(FirstName, ' ', LastName),
-#                CanonicalName = str_to_upper(FullName)) |>
-#         filter(RefereeType != 'Grassroots Futsal Referee') |>
-#         rename(RegID=`USSF-Id`) |>
-#         mutate(dup = duplicated(CanonicalName)) |>
-#         filter(!dup) |>
-#         select(-dup)
-#     return(refs)
-# }
 
 # Return the list of all referees for selection joined with the referee database
 # The complete referee list may not have the details from the spreadsheet of active refs

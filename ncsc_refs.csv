@@ -1,0 +1,213 @@
+"","ID","LastName","FirstName","Age","Gender","City","Zip","Referee","LastLogin","Registered.2021","Registered.2022","InitialYear","CurrentYear","Rank.Center","Rank.AR","Org.InitialYear","Org.CurrentYear","Email","SecondaryEmail"
+"1","2019-0000-0412-4805","Adams","Sam",17,"MALE","Beaverton","97006","Grassroots",2022-02-17,TRUE,TRUE,2019,2022,10,10,NA,NA,"sam_adams04@icloud.com","mara.adams@me.com"
+"2","1000-0000-0179-0628","Akines","Hudson",14,"MALE","Gresham","97080","Grassroots",2021-12-26,TRUE,FALSE,2021,2021,1,10,2021,2021,"wtakines@comcast.net","hrakines@gmail.com"
+"3","2019-0000-0413-1131","Altman","Lydia",16,"FEMALE","Milwaukie","97222","Grassroots",2021-10-30,TRUE,TRUE,2019,2022,10,10,NA,NA,"altmanlydia@gmail.com","altmansfour@gmail.com"
+"4","2019-0000-0411-9085","Aragon","Ramon",52,"MALE","Happy Valley","97086","Grassroots",2022-02-28,TRUE,TRUE,2019,2022,10,10,NA,0,"aragon.ramon@gmail.com",NA
+"5","1000-0000-0180-8735","Arms","Isabella",14,"FEMALE","Damascus","97089","Grassroots",2022-03-01,FALSE,TRUE,2021,2022,1,2,2021,2021,"juliaarms@gmail.com","jeffandjuls@comcast.net"
+"6","2016-0000-0381-8234","Asan","Erich",29,"MALE","Portland","97227","Grassroots",2022-03-08,TRUE,TRUE,2016,2022,10,10,NA,2021,"easanudel@gmail.com",NA
+"7","2019-0000-0410-8734","Bathija","Aarav",18,"MALE","Beaverton","97006","Grassroots",2021-06-25,TRUE,FALSE,2019,2021,10,10,NA,0,"aaravbathija@gmail.com","keerthibathija@gmail.com"
+"8","1000-0000-0181-6971","Boag","Kyra",15,"FEMALE","Happy Valley","97086","Grassroots",2022-03-07,FALSE,TRUE,2021,2022,1,2,2021,2021,"kyraboag@gmail.com","theboags@gmail.com"
+"9","2016-0000-0392-3590","Boehrer","Lilly",17,"FEMALE","Wilsonville","97070","Grassroots",2020-02-16,TRUE,FALSE,2016,2021,10,10,NA,2017,NA,NA
+"10","2016-0000-0392-3591","Boehrer","Roland",54,"MALE","WILSONVILLE","97070","Grassroots",2022-03-08,TRUE,FALSE,2016,2021,10,10,NA,2017,"rolandboehrer@fibersphere.net",NA
+"11","2014-0609-0474-6211","Brehm","Zach",21,"MALE","Wilsonville","97070","Grassroots",2022-03-08,FALSE,TRUE,2014,2022,10,10,NA,2015,"zb.train@gmail.com",NA
+"12","1000-0000-0177-7627","Carlson","Adrian",15,"MALE","Portland","97206","Grassroots",2022-03-07,TRUE,TRUE,2021,2022,1,10,NA,2021,"adriancarlson90@gmail.com","aileahd@gmail.com"
+"13","2008-0116-2096-7891","Castro","Victor",58,"MALE","Oregon City","97045","Regional",2022-03-08,TRUE,FALSE,2008,2021,10,10,NA,2015,"victorcastro529@gmail.com",NA
+"14","2015-0000-0312-5634","Combs","Heather",48,"FEMALE","Portland","97230","Grassroots",2022-03-08,FALSE,TRUE,2015,2022,10,10,2019,2019,"heather_combs00@yahoo.com",NA
+"15","2019-0000-0412-8944","Cunningham-Parmeter","Jonah",16,"MALE","Portland","97219","Grassroots",2022-03-07,FALSE,TRUE,2019,2022,0,0,NA,2022,"jonahscp@gmail.com",NA
+"16","2019-0000-0413-1322","Daugherty","Zachary",16,"U","Troutdale","97060","Grassroots",2021-01-20,TRUE,FALSE,2019,2021,10,10,NA,0,NA,NA
+"17","2019-0000-0411-1271","De Souza","Reuben",17,"MALE","Happy Valley","97086","Grassroots",2021-05-25,TRUE,FALSE,2019,2021,10,10,NA,0,"r2d2.az11@gmail.com","r3_desouza@msn.com"
+"18","1000-0000-0181-3859","De Souza","Rylan",14,"MALE","Happy Valley","97086","Grassroots",2021-11-04,FALSE,TRUE,2021,2022,2,10,2021,2021,"desouzar@nclack.org","r3_desouza@msn.com"
+"19","2019-0000-0411-7741","Dochez","Aleksey",16,"MALE","Lake Oswego","97034","Grassroots",2022-03-05,FALSE,TRUE,2019,2022,1,3,2022,2022,"alekseydochez@gmail.com","jdochez@gmail.com"
+"20","1000-0000-0178-7554","Edelen Hare","Liko",14,"MALE","Portland","97219","Grassroots",2022-02-28,TRUE,FALSE,2021,2021,2,10,NA,2021,"edelenharel@catlin.edu","edelenhare@gmail.com"
+"21","2019-0000-0413-3347","Erving","Kayla",17,"U","Milwaukie","97222","Grassroots",2020-02-29,TRUE,FALSE,2019,2021,10,10,NA,0,NA,NA
+"22","2018-0000-0408-1710","Es-Sahb","Noureddine",50,"MALE","Gresham","97080","Grassroots",2022-02-03,TRUE,TRUE,2018,2022,2,3,2022,2022,"noess_2003@hotmail.com","es_sah@hotmail.com"
+"23","1000-0000-0177-9013","Espadas","Oswaldo",15,"MALE","Portland","97267","Grassroots",2022-03-08,TRUE,TRUE,2021,2022,3,10,NA,2021,"osocuentadejuegos@gmail.com","oswaldo.espadas@gmail.con"
+"24","2018-0000-0408-1709","Espinosa","Giancarlo",17,"MALE","Happy Valley","97086","Grassroots",2021-01-10,TRUE,FALSE,2018,2021,10,10,NA,NA,"espinosag@nclack.org",NA
+"25","2019-0000-0413-3348","Fels","David",18,"MALE","West Linn","97068","Grassroots",2021-08-31,TRUE,FALSE,2019,2021,2,10,NA,2020,"felst@wlhs.wlwv.k12.or.us","felsfamily@gmail.com"
+"26","1000-0000-0177-7554","Fries","Bruce",42,"MALE","Oregon City","97045","Grassroots",2022-02-28,TRUE,TRUE,2021,2022,10,10,2021,2021,"bruce.fries@yahoo.com",NA
+"27","1000-0000-0178-9543","Galindo-Schmith","Javier",14,"MALE","Damascus","97089","Grassroots",2022-03-03,TRUE,TRUE,2021,2022,2,10,2021,2021,"javiergalindoschmith@gmail.com","mschmith@yahoo.com"
+"28","2019-0000-0413-4180","Gilley","Jasper",15,"MALE","Portland","97202","Grassroots",2020-03-17,TRUE,FALSE,2019,2021,10,10,NA,0,"mochicap951@gmail.com","brucegilley@yahoo.com"
+"29","2019-0000-0411-1858","Gladden-Kvist","Rory",16,"MALE","Damascus","97089","Grassroots",2022-03-08,TRUE,TRUE,2019,2022,1,10,NA,2020,"rorygladdenkvist@gmail.com","rogergladdenkvist@yahoo.com"
+"30","2018-0000-0408-8900","Gonzalez-Glover","Boston",17,"MALE","Portland","97220","Grassroots",2022-03-06,TRUE,TRUE,2018,2022,10,10,NA,0,"bostonq11@gmail.com","celene11@yahoo.com"
+"31","2020-0000-0415-4139","Guerouate","Faris",17,"MALE","tigard","97223","Grassroots",2021-04-05,TRUE,FALSE,2020,2021,10,10,NA,2020,"farisguer04@outlook.com",NA
+"32","2019-0000-0412-6054","Hauck","Jesse",16,"MALE","Portland","97217","Grassroots",2022-03-08,TRUE,TRUE,2019,2022,10,10,2021,2021,"obi2kenobi2@gmail.com","calyn.hauck@gmail.com"
+"33","2018-0000-0406-6652","Hawkins","Gabriel",16,"MALE","gresham","97080","Grassroots",2022-02-04,TRUE,TRUE,2018,2022,10,10,NA,NA,"gabehawkins1230@gmail.com","juliehawkins724@gmail.com"
+"34","2019-0000-0412-5934","Hayes","Brady",18,"MALE","Damascus","97089","Grassroots",2019-12-07,TRUE,FALSE,2019,2021,10,10,NA,0,NA,NA
+"35","2012-1226-3061-4125","Herrera","Efren",53,"MALE","Clackamas","97015","Grassroots",2022-03-07,FALSE,TRUE,2013,2022,10,10,NA,2016,"fairplay1968@gmail.com","herrera_efren@yahoo.com"
+"36","2015-0109-0013-2691","Herrera","Jakob",20,"MALE","Portland","97212","Grassroots",2021-10-20,TRUE,FALSE,2015,2021,10,10,NA,2015,"fishfury1@gmail.com","geobuddy@gmail.com"
+"37","2019-0000-0413-2336","Hillard","Caleb",14,"MALE","Milwaukie","97267","Grassroots",2021-08-23,TRUE,FALSE,2019,2021,10,10,NA,0,"hillardc@nclack.org","mindydhillard@hotmail.com"
+"38","2019-0000-0413-1349","Ho","Cody",18,"U","Clackamas","97015","Grassroots",2020-01-06,TRUE,FALSE,2019,2021,10,10,NA,0,NA,NA
+"39","2019-0000-0413-6356","Homer","Levi",16,"MALE","Portland","97213","Grassroots",2022-03-06,TRUE,TRUE,2019,2022,1,10,NA,2019,"lvi.hmr@gmail.com","katiereichpdx@gmail.com"
+"40","1000-0000-0178-4951","Hoobler","Evan",14,"MALE","Lake Oswego","97034","Grassroots",2022-03-08,TRUE,TRUE,2021,2022,1,3,2021,2021,"niskit07@gmail.com","megiej@yahoo.com"
+"41","2018-0000-0409-8458","Horna","Oscar",49,"MALE","Milwaukie","97267","Grassroots",2022-03-04,TRUE,TRUE,2018,2022,10,10,NA,0,"ohorna@yahoo.com",NA
+"42","2016-0000-0390-4193","Hueer","Tim",39,"MALE","Portland","97267","Grassroots",2022-02-27,TRUE,TRUE,2016,2022,10,10,NA,2016,"timhueer@gmail.com",NA
+"43","2015-0000-0315-6884","Huntington","Maeve",19,"FEMALE","Portland","97214","Grassroots",2021-07-24,TRUE,FALSE,2015,2021,3,10,NA,2021,"maeverh@gmail.com",NA
+"44","1000-0000-0178-4489","Hurlbert","Marisa",30,"FEMALE","Portland","97206","Grassroots",2022-02-28,TRUE,TRUE,2021,2022,10,10,2021,2021,"marisahurlbert@gmail.com",NA
+"45","1000-0000-0178-5114","Huss","Addison",15,"FEMALE","Portland","97202","Grassroots",2021-11-23,TRUE,TRUE,2021,2022,1,3,NA,2021,"addyhuss7@gmail.com","chicahuss@yahoo.com"
+"46","1000-0000-0178-5865","Huss","Josh",15,"MALE","Portland","97202","Grassroots",2022-03-07,TRUE,TRUE,2021,2022,1,3,2021,2021,"joshhuss14@gmail.com","chicahuss@yahoo.com"
+"47","0010-2281-5572-2610","Irigoyen","Janet",66,"FEMALE","Beaverton","97006",NA,2022-03-08,FALSE,TRUE,NA,NA,NA,NA,NA,NA,"janet.irigoyen@gmail.com",NA
+"48","2016-0000-0381-9909","Johnson","Hunter",19,"MALE","Happy Valley","97086","Grassroots",2022-03-05,TRUE,TRUE,2016,2022,10,10,NA,2016,"hunterj271@gmail.com",NA
+"49","1000-0000-0187-6712","Johnson","Oscar",13,"MALE","Milwaukie","97222","Grassroots",2022-03-07,FALSE,TRUE,2022,2022,1,2,2022,2022,"oscarjohnson1103@gmail.com","swerber@comcast.net"
+"50","2014-0802-0014-7455","Johnston","Colleen",46,"FEMALE","Portland","97202","Grassroots",2021-07-10,TRUE,FALSE,2014,2021,15,15,NA,2017,"soccer_colleen@yahoo.com",NA
+"51","2018-0000-0410-1455","Jones","Owen",16,"MALE","Portland","97202","Grassroots",2022-01-25,TRUE,TRUE,2018,2022,10,10,NA,NA,"owendjones23@gmail.com","amykhillman@gmail.com"
+"52","2016-0000-0390-0865","Juarez-Cruz","Josepher",18,"MALE","Oregon City","97045","Grassroots",2021-12-25,TRUE,FALSE,2016,2021,10,10,NA,2016,"juarezjosepher821@gmail.com",NA
+"53","2019-0000-0410-8745","Kato","Eiden",17,"MALE","Happy Valley","97086","Grassroots",2021-06-21,TRUE,FALSE,2019,2021,10,10,NA,NA,"katoei@nclack.org","chrisandkanae@hotmail.com"
+"54","2018-0000-0407-6044","Kayser","Bill",54,"MALE","Portland","97267","Grassroots",2022-03-08,TRUE,TRUE,2018,2022,10,10,2018,2021,"bill@kayser.org",NA
+"55","2018-0000-0407-6043","Kayser","Felix",16,"MALE","Portland","97267","Grassroots",2022-03-08,TRUE,TRUE,2018,2022,10,10,NA,NA,"felix@kayser.org","bill@kayser.org"
+"56","2017-0000-0401-6581","Kelly","Bryce",17,"MALE","West Linn","97068","Grassroots",2021-09-18,TRUE,FALSE,2017,2021,10,10,NA,2018,"brkelly6585@gmail.com","bkelly6585@gmail.com"
+"57","1000-0000-0181-7361","Kleiv","Mali",16,"FEMALE","Portland","97202","Grassroots",2022-02-22,FALSE,TRUE,2021,2022,1,3,NA,2021,"mollycliff5490@gmail.com","sckleiv@comcast.net"
+"58","0021-0031-4395-5750","Koll","Cj",33,"MALE","West Linn","97068",NA,2022-02-27,TRUE,TRUE,2002,2022,16,10,NA,2017,"ChristopherKoll@gmail.com","cj.assigning@gmail.com"
+"59","2018-0000-0408-1721","Lancaster","Carter",17,"MALE","Oregon City","97045","Grassroots",2022-02-14,TRUE,FALSE,2018,2021,10,10,NA,0,NA,NA
+"60","0010-8061-0111-7980","Latteri","Michael",35,"MALE","Eugene","97405","Grassroots",2021-03-29,TRUE,FALSE,2015,2021,10,10,NA,2019,"mikeylatteri@gmail.com",NA
+"61","2018-0000-0409-5051","Laufenberg","Alex",17,"MALE","Portland","97225","Grassroots",2022-03-05,TRUE,TRUE,2018,2022,1,10,NA,2021,"alexlauf4@gmail.com","jonlaufenberg@gmail.com"
+"62","2019-0000-0413-6362","Laviolette","Sam",16,"MALE","west linn","97068","Grassroots",2022-03-06,TRUE,TRUE,2019,2022,1,10,NA,2021,"splaviolette@gmail.com","naomilaviolette@gmail.com"
+"63","2015-0123-0087-7607","Leoutsakas","Dennis",73,"MALE","Fairview","97024","Grassroots",2021-12-18,TRUE,FALSE,2015,2022,10,10,NA,2015,"dxleoutsakas@salisbury.edu",NA
+"64","2019-0000-0413-1360","Long","Milo",15,"MALE","Portland","97201","Grassroots",2021-08-18,TRUE,TRUE,2019,2022,10,10,NA,NA,"milo.long2606@gmail.com","wendysmith1865@gmail.com"
+"65","2019-0000-0413-2346","Lotspeich","Lucy",15,"FEMALE","west linn","97068","Grassroots",2022-03-06,TRUE,TRUE,2019,2022,2,3,2021,2021,"lotspeichlucy@gmail.com","lucylotspeich59@gmail.com"
+"66","2019-0000-0412-8965","Madison","Liam",16,"MALE","Lake Oswego","97035","Grassroots",2022-02-28,TRUE,FALSE,2019,2021,10,10,NA,NA,"lcmpdx@protonmail.com","ldmpdx@gmail.com"
+"67","2019-0000-0412-7952","Maiden","Brandt",18,"MALE","Happy Valley","97086","Grassroots",2022-01-25,TRUE,FALSE,2019,2021,10,10,NA,0,"brandtmaiden@gmail.com","taramaiden@comcast.net"
+"68","0010-2281-5030-1630","Mangan","Gerard",68,"MALE","Portland","97202","Grassroots",2022-03-07,TRUE,TRUE,NA,2022,10,10,NA,0,"gmanaug4@gmail.com",NA
+"69","2018-0000-0408-0553","Marineau","Elsie",17,"FEMALE","Oregon City","97045","Grassroots",2021-08-05,TRUE,FALSE,2018,2021,10,10,NA,NA,"soccergirl3123@gmail.com","chickadees5@icloud.com"
+"70","2019-0000-0413-1369","Martin","Bria",15,"U","Gladstone","97027","Grassroots",2021-10-25,TRUE,FALSE,2019,2021,10,10,NA,0,NA,NA
+"71","2019-0000-0413-1370","Martinez","Liliana",16,"U","Milwaukie","97267","Grassroots",2021-12-29,TRUE,TRUE,2019,2022,10,10,NA,0,"matimar@q.com",NA
+"72","2019-0000-0413-2347","Mcallister","Aubrey",16,"FEMALE","Happy Valley","97086","Grassroots",2021-05-04,TRUE,FALSE,2019,2021,2,3,2021,2021,"mcallisterau@nclack.org","jordanmcallister@me.com"
+"73","2016-0000-0387-5210","Meneghello","Rich",50,"MALE","Portland","97225","Regional",2022-03-08,TRUE,TRUE,2016,2022,10,10,NA,2016,"rich.meneghello@gmail.com",NA
+"74","0010-2281-3460-2120","Miller","John",73,"MALE","Portland","97210","Grassroots",2022-01-15,TRUE,FALSE,2002,2022,10,10,NA,2015,"jcm7399@msn.com",NA
+"75","1000-0000-0177-7840","Mitchelldyer","Carter",14,"MALE","Milwaukie","97267","Grassroots",2021-10-10,TRUE,FALSE,2021,2021,2,3,NA,2021,"cartermitchelldyer@gmail.com","craig@craigmitchelldyer.com"
+"76","2019-0000-0410-8747","Mukadam","Ammar",16,"MALE","Portland","97229","Grassroots",2021-04-09,TRUE,FALSE,2019,2021,10,10,NA,0,"helloammarm@gmail.com","hellomuffadal@gmail.com"
+"77","2014-0418-2951-6563","Nelson","Lucas",20,"MALE","Happy Valley","97086","Grassroots",2019-09-24,TRUE,TRUE,2014,2022,10,10,NA,2014,"lukenelson111@gmail.com",NA
+"78","2016-0000-0389-0264","Nelson","Zachary",18,"MALE","Happy Valley","97086","Grassroots",2021-11-03,TRUE,TRUE,2016,2022,10,10,NA,2017,"zachnelson888@gmail.com",NA
+"79","1000-0000-0185-9601","Nguyen","Amanda",23,"FEMALE","Portland","97086","Grassroots",2022-03-07,FALSE,TRUE,2021,2022,10,10,2022,2022,"nguyen.amanda17@gmail.com",NA
+"80","2017-0000-0394-2692","Olsen","Christian",18,"MALE","Highlands Ranch","80129","Grassroots",2021-06-19,TRUE,FALSE,2017,2021,10,10,NA,2017,"tane49@icloud.com",NA
+"81","2017-0000-0402-6739","Orr","Elliot",16,"MALE","Portland","97219","Grassroots",2022-02-04,TRUE,FALSE,2017,2021,10,10,NA,2017,NA,NA
+"82","2014-0106-0362-2991","Osman","Ahmed",44,"MALE","Sherwood","97140","Grassroots",2022-03-07,TRUE,TRUE,2014,2022,10,10,NA,2015,"roukka2000@gmail.com",NA
+"83","1000-0000-0177-7782","Palmer","Alyssa",15,"FEMALE","Oregon City","97045","Grassroots",2021-07-21,TRUE,FALSE,2021,2021,1,10,NA,2021,"babycakeslyss@gmail.com","angelfrmbeneath@hotmail.com"
+"84","2018-0000-0409-4435","Pauken","Elyse",16,"FEMALE","Milwaukie","97222","Grassroots",2021-11-29,TRUE,TRUE,2018,2022,10,10,NA,NA,"Empauken@gmail.com","kpauken@gmail.com"
+"85","1000-0000-0179-1383","Perez","Hector",14,"MALE","portland","97266","Grassroots",2021-06-24,TRUE,FALSE,2021,2021,1,3,2021,2021,"hectorperez42@icloud.com","Tabsauce@yahoo.com"
+"86","2008-1130-2941-4163","Perez Mendoza","Jose",41,"MALE","Vancouver","98662","Regional",2022-03-07,TRUE,TRUE,2009,2022,10,10,NA,2016,"jose5037160@gmail.com","chepoluis25@hotmail.com"
+"87","2019-0000-0413-3377","Perkins","Norah",17,"FEMALE","Milwaukie","97222","Grassroots",2021-11-10,TRUE,FALSE,2019,2021,10,10,2020,2021,"norahperk@gmail.com","crawfordmg@yahoo.com"
+"88","1000-0000-0177-7159","Perry","Elijah",14,"MALE","Portland","97267","Grassroots",2021-12-05,TRUE,FALSE,2021,2021,1,10,NA,2021,"Arbiteredp@gmail.com","kd4679@gmail.com"
+"89","2019-0000-0410-4688","Peters","Peyton",17,"MALE","Happy Valley","97086","Grassroots",2021-05-10,TRUE,FALSE,2019,2021,10,10,NA,0,NA,NA
+"90","2017-0000-0404-0699","Peterson","Ashley",17,"FEMALE","Canby","97013","Grassroots",2022-02-17,TRUE,TRUE,2017,2022,1,10,NA,2020,"ashleypeterson978@gmail.com","jenengelgau@yahoo.com"
+"91","2016-0000-0376-1337","Phillips","Justin",34,"MALE","Oregon City","97045","Grassroots",2022-03-07,TRUE,TRUE,2016,2022,10,10,NA,2017,"PHILLIPS.JUSTIN.Q@GMAIL.COM",NA
+"92","1000-0000-0179-3541","Portis","Samuel",16,"MALE","Clackamas","97015","Grassroots",2022-01-17,TRUE,TRUE,2021,2022,2,3,NA,2021,"samportis246@gmail.com","merri27@hotmail.com"
+"93","1000-0000-0178-2204","Preciso","Serafina",14,"FEMALE","Portland","97236","Grassroots",2022-02-21,TRUE,TRUE,2021,2022,10,10,2021,2021,"tonymariaserafina@gmail.com","anthonypreciso@msn.com"
+"94","2018-0000-0410-1460","Pritchard","George",17,"MALE","Portland","97202","Grassroots",2020-02-18,TRUE,FALSE,2018,2021,10,10,NA,0,NA,NA
+"95","1000-0000-0181-3325","Prudhomme","Grace",15,"FEMALE","Milwaukie","97267","Grassroots",2022-03-03,FALSE,TRUE,2021,2022,1,10,2021,2022,"gracieprudhomme@gmail.com","vaprudhomme@comcast.net"
+"96","1000-0000-0184-3760","Rasmussen","Landon",15,"MALE","Clackamas","97015","Grassroots",2021-10-30,FALSE,TRUE,2021,2022,1,2,2021,2021,"landon0227@gmail.com","timbersfam@gmail.com"
+"97","0010-2281-3143-1860","Record","Shana",56,"FEMALE","Hiawassee","30546",NA,2022-03-08,TRUE,TRUE,NA,NA,NA,NA,NA,NA,"shana.record@stacksports.com",NA
+"98","2018-0000-0406-1285","Redpath","Gavin",18,"MALE","Lake Oswego","97034","Grassroots",2021-04-12,TRUE,FALSE,2018,2021,10,10,NA,0,"gavintredpath@gmail.com",NA
+"99","2018-0000-0408-5066","Rine","Jeff",57,"MALE","Oregon City","97045","Grassroots",2022-03-08,TRUE,TRUE,2018,2022,10,10,NA,0,"jeff.rine@aol.com","jmjafb@aol.com"
+"100","2018-0000-0407-6058","Ross","Noah",17,"MALE","Portland","97206","Grassroots",2021-06-07,TRUE,FALSE,2018,2021,10,10,NA,0,NA,NA
+"101","1000-0000-0183-4734","Savage","Malia",14,"FEMALE","Clackamas","97015","Grassroots",2022-03-07,FALSE,TRUE,2021,2022,1,2,NA,2021,"malia.savage07@gmail.com","julie.savage3@gmail.com"
+"102","2019-0000-0413-6374","Schilling","Paxton",16,"MALE","Clackamas","97015","Grassroots",2020-03-02,TRUE,FALSE,2019,2021,2,3,2020,2021,"schillingp@nclack.org","kas4bks@comcast.net"
+"103","1000-0000-0177-4888","Schoenborn","Hailee",15,"FEMALE","Clackamas","97015","Grassroots",2021-11-24,TRUE,FALSE,2021,2021,1,3,NA,2021,"haileed34@gmail.com","christi.schoenborn@gmail.com"
+"104","2019-0000-0413-3382","Schwartz","Nadia",17,"U","Portland","97212","Grassroots",2020-02-11,TRUE,FALSE,2019,2021,10,10,NA,0,NA,NA
+"105","1000-0000-0185-0906","Shaver","Katherine",15,"FEMALE","Portland","97215","Grassroots",2022-03-07,FALSE,TRUE,2021,2022,1,3,2021,2021,"hbenke@yahoo.com","mrshaver1@gmail.com"
+"106","1000-0000-0185-1810","Smart","David",53,"MALE","Tigard","97223","Grassroots",2022-03-08,FALSE,TRUE,2021,2022,10,10,2021,2021,"dsmart@dsmart.com",NA
+"107","1000-0000-0181-9860","Smith","Nolan",15,"MALE","West linn","97068","Grassroots",2022-03-02,FALSE,TRUE,2021,2022,1,2,2021,2021,"ndanielsmith99@gmail.com","gfrasersmith@gmail.com"
+"108","2016-0000-0387-4304","Stevens","Andrew",19,"MALE","Happy Valley","97086","Grassroots",2021-12-23,TRUE,TRUE,2016,2022,10,10,2021,2021,"andrewO4@icloud.com",NA
+"109","2018-0000-0407-4400","Stevenson","Ben",17,"MALE","Portland","97202","Grassroots",2022-01-24,TRUE,TRUE,2018,2022,10,10,NA,NA,"bstev1864@gmail.com","ebstev@yahoo.com"
+"110","2018-0000-0407-4401","Stevenson","Matt",17,"MALE","PORTLAND","97202","Grassroots",2021-12-04,TRUE,TRUE,2018,2022,10,10,NA,NA,"msstev731@gmail.com","stevensonmatt701@gmail.com"
+"111","2018-0000-0407-4402","Stevenson","Sammy",19,"MALE","Portland","97202","Grassroots",2021-03-29,TRUE,FALSE,2018,2022,10,10,NA,0,"samuelvstevenson@gmail.com","ebstev@yahoo.com"
+"112","2018-0000-0408-0587","Stoeff","Chris",17,"MALE","Milwaukie","97267","Grassroots",2021-01-28,TRUE,FALSE,2018,2021,10,10,NA,0,NA,NA
+"113","2019-0000-0411-1606","Stuart","Jack",18,"MALE","West Linn","97068","Grassroots",2020-10-11,TRUE,FALSE,2019,2021,10,10,NA,0,"sackjewart@gmail.com","ja.stuart03@gmail.com"
+"114","1000-0000-0185-3583","Sychov-Hanoosh","Sasha",14,"MALE","Portland","97213","Grassroots",2022-03-08,FALSE,TRUE,2021,2022,1,2,2022,2022,"Sashasychovhanoosh@gmail.com","yasmeensh@yahoo.com"
+"115","2017-0000-0402-9686","Thanik","Dhilan",18,"MALE","Beaverton","97007","Grassroots",2020-02-25,TRUE,FALSE,2017,2021,10,10,NA,2017,NA,NA
+"116","2014-0127-1492-5679","Toews","Dolby",21,"MALE","Beaverton","97008","Grassroots",2022-03-07,TRUE,TRUE,2014,2022,10,10,2021,2021,"dolbytoews@gmail.com","toewsdo@oregonstate.edu"
+"117","2018-0000-0406-6662","Tomlinson","Isley",16,"FEMALE","Portland","97215","Grassroots",2019-10-30,TRUE,FALSE,2018,2021,10,10,NA,0,"isleytomlinson@gmail.com","princesstomlinson@gmail.com"
+"118","1000-0000-0169-1484","Torrez","Bella",15,"FEMALE","Milwaukie","97267","Grassroots",2021-10-10,TRUE,TRUE,2021,2022,1,10,2021,2021,"torrezrabe@gmail.com","r.g.torrez@gmail.com"
+"119","1000-0000-0186-3102","Trivino Veloza","Sergio",13,"MALE","Beaverton","97006","Grassroots",2022-01-16,FALSE,TRUE,2021,2022,1,2,2021,2021,"stveloza@gmail.com","marcoskarel@gmail.com"
+"120","1000-0000-0178-4352","Tzantarmas","Theodosious",16,"MALE","Tualatin","97062","Grassroots",2022-03-03,TRUE,FALSE,2021,2021,1,3,2021,2021,"Tytzantarmas@gmail.com","pilatesofportland@gmail.com"
+"121","1000-0000-0178-6863","Van Vleet","Lanie",14,"FEMALE","Portland","97202","Grassroots",2022-03-04,TRUE,TRUE,2021,2022,1,2,2021,2021,"laniev2@icloud.com","klvv@comcast.net"
+"122","2018-0000-0407-9059","Velazquez","Cesar",52,"MALE","Salem","97304","Grassroots",2022-03-08,TRUE,TRUE,2018,2022,10,10,2021,2021,"cvelazquez@monrovia.com",NA
+"123","1000-0000-0178-4809","Vice","Kooper",15,"MALE","Portland","97219","Grassroots",2021-09-11,TRUE,FALSE,2021,2021,1,3,2021,2021,"koopervice@gmail.com","kmrushing@hotmail.com"
+"124","1000-0000-0177-7942","Wagner","Lila",16,"FEMALE","Portland","97214","Grassroots",2021-05-26,TRUE,FALSE,2021,2021,2,10,2021,2021,"ljwagner7898@gmail.com","rima.chamie@gmail.com"
+"125","2019-0000-0410-4697","Warner","Luke",17,"MALE","clackamas","97015","Grassroots",2021-11-14,TRUE,FALSE,2019,2021,10,10,NA,0,"lukewarner_3_6@yahoo.com","warnerfamily9@yahoo.com"
+"126","1000-0000-0180-6896","Wesener","Brooke",13,"FEMALE","Happy Valley","97086","Grassroots",2021-10-17,FALSE,TRUE,2021,2022,1,3,2021,2021,"mirowesener@gmail.com","mickwesener@gmail.com"
+"127","2019-0000-0410-4699","Whipple","Dane",15,"MALE","Lake Oswego","97034","Grassroots",2022-03-06,TRUE,TRUE,2019,2022,10,10,NA,NA,"dane.whipple1@gmail.com","stewart.whipple@gmail.com"
+"128","2015-0000-0316-2433","Williams","Adin",21,"MALE","Happy Valley","97086","Grassroots",2021-06-30,TRUE,FALSE,2015,2021,10,10,NA,2015,"awilliams19@georgefox.edu",NA
+"129","2019-0000-0413-1436","Young","Francesca",15,"FEMALE","Portland","97267","Grassroots",2021-12-22,TRUE,TRUE,2019,2022,10,10,NA,0,"frankieyoung06@gmail.com","mindhas@gmail.com"
+"130","2018-0000-0405-2854","Zarifovic","Mahir",31,"MALE","Gresham","97080","Grassroots",2022-02-26,FALSE,TRUE,2018,2022,10,10,NA,0,"zarifovicmahir@gmail.com",NA
+"131","2017-0000-0402-8950","Aizawa","Matthew",18,"M",NA,NA,NA,2021-03-28,FALSE,FALSE,2017,2020,10,10,NA,0,"mattzawa2003@gmail.com",NA
+"132","2014-0826-1439-0725","Alonzo","Magdalena",20,"F",NA,NA,NA,2020-07-28,FALSE,FALSE,2015,2019,10,10,NA,2017,"freedom15mags@gmail.com",NA
+"133","2019-0000-0411-9084","Aragon","Ramon manuel",20,"M",NA,NA,NA,2020-11-03,FALSE,FALSE,2019,2019,10,10,NA,0,"ramonmaragon@gmail.com",NA
+"134","2017-0000-0402-3666","Baer","Ian",18,"M",NA,NA,NA,2020-09-02,FALSE,FALSE,2017,2020,10,10,NA,2017,"lvtlaf@aol.com",NA
+"135","2006-0830-0241-9801","Baetscher","Eric",30,"M",NA,NA,NA,2019-05-04,FALSE,FALSE,2006,2019,10,10,NA,2017,"ebatscher@gmx.ch",NA
+"136","2016-0000-0390-4187","Bennett","Tyler",20,"M",NA,NA,NA,2020-12-19,FALSE,FALSE,2016,2020,10,10,NA,2017,"Jamie.bennett1997@gmail.com",NA
+"137","2018-0000-0409-1818","Bere","Wonderful",52,"M",NA,NA,NA,2020-02-09,FALSE,FALSE,2018,2020,10,10,2021,2020,"fafibere@gmail.com",NA
+"138","2017-0000-0403-3034","Berkman","Josh",18,"M",NA,NA,NA,2020-07-31,FALSE,FALSE,2017,2019,10,10,NA,2017,"josh.d.berkman@gmail.com",NA
+"139","2019-0000-0411-7474","Bolger","Charlie",14,"F",NA,NA,NA,2019-05-03,FALSE,FALSE,2019,2019,10,10,NA,0,"Elizabethbolger@comcast.net",NA
+"140","2017-0000-0402-3873","Brewer","Gary",40,"M",NA,NA,NA,2020-01-29,FALSE,FALSE,2017,2019,10,10,NA,2017,"gpbrew@yahoo.com",NA
+"141","2018-0000-0408-5011","Brunner","Morgan",16,"F",NA,NA,NA,2019-06-25,FALSE,FALSE,2018,2019,10,10,NA,0,"duxfan2002@yahoo.com",NA
+"142","2012-0126-2603-8675","Chevtchenko","Igor",62,"M",NA,NA,NA,2021-06-20,FALSE,FALSE,2012,2020,10,10,NA,0,"1994tango@gmail.com",NA
+"143","2019-0000-0412-7938","Christenson","Elizabeth",16,"F",NA,NA,NA,2020-02-24,FALSE,FALSE,2019,2019,10,10,NA,0,"theultimate.egirl@gmail.com",NA
+"144","2018-0000-0408-0072","Cruz","Mason",17,"M",NA,NA,NA,2019-05-03,FALSE,FALSE,2018,2019,10,10,NA,0,"cruzma@nclack.org",NA
+"145","2019-0000-0413-1321","Daugherty","Mackenzie",19,"F",NA,NA,NA,2020-02-14,FALSE,FALSE,2019,2020,10,10,NA,0,"mackenzied03@gmail.com",NA
+"146","2019-0000-0410-4664","Gefroh","Dominic",18,"M",NA,NA,NA,2020-05-03,FALSE,FALSE,2019,2019,10,10,NA,0,"gefrohdale@gmail.com",NA
+"147","2019-0000-0410-8740","Goodell","Brandon",16,"M",NA,NA,NA,2021-10-02,FALSE,FALSE,2019,2019,10,10,NA,0,"superbran06@icloud.com",NA
+"148","2019-0000-0410-8742","Gwyn","Seamus",17,"M",NA,NA,NA,2019-10-30,FALSE,FALSE,2019,2019,10,10,NA,0,"seamusgwyn@gmail.com",NA
+"149","2019-0000-0410-8743","Gwyn","William",19,"M",NA,NA,NA,2020-01-07,FALSE,FALSE,2019,2019,10,10,NA,0,"ilovethesox2013@gmail.com",NA
+"150","2017-0000-0403-7517","Hamel","William",29,"M",NA,NA,NA,2020-10-06,FALSE,FALSE,2017,2020,10,10,NA,2017,"willhamel21@gmail.com",NA
+"151","2017-0000-0396-8654","Hansen","Tristan",18,"M",NA,NA,NA,2020-01-24,FALSE,FALSE,2017,2019,10,10,NA,2017,"tristan.hansen14@protonmail.com",NA
+"152","2015-0000-0312-5646","Harding","Ben",21,"M",NA,NA,NA,2019-07-11,FALSE,FALSE,2015,2019,10,10,NA,2015,"grapebro@msn.com",NA
+"153","2019-0000-0411-7487","Hassan","Omar",15,"M",NA,NA,NA,2021-06-25,FALSE,FALSE,2019,2019,10,10,NA,0,"omarikohassan1234@gmail.com",NA
+"154","2019-0000-0411-1277","Hawkins","Adam",17,"M",NA,NA,NA,2019-09-14,FALSE,FALSE,2019,2019,10,10,NA,0,"adamroberthawkins@outlook.com",NA
+"155","2018-0000-0407-6038","Helm","Tucky",18,"M",NA,NA,NA,2021-03-12,FALSE,FALSE,2018,2019,10,10,NA,0,"tucky.helm@gmail.com",NA
+"156","2017-0000-0402-9676","Hensley","Ayden",18,"M",NA,NA,NA,2020-11-29,FALSE,FALSE,2017,2020,10,10,NA,0,"bhensley97@yahoo.com",NA
+"157","2017-0000-0399-8207","Hoang","Minh",32,"M",NA,NA,NA,2020-01-12,FALSE,FALSE,2017,2018,10,10,NA,2017,"hoangthongminh0116@gmail.com",NA
+"158","2014-0718-0694-8994","Hohnholz","Mike",44,"M",NA,NA,NA,2022-03-08,FALSE,FALSE,2014,2022,16,10,NA,0,"mh.assigning@gmail.com",NA
+"159","2009-0907-1407-0074","Jimenez-sutton","Robert",28,"M",NA,NA,NA,2021-04-17,FALSE,FALSE,2009,2020,10,10,NA,0,"Robgadiel11@gmail.com",NA
+"160","2016-0000-0384-0606","Johnson","Stan",55,"M",NA,NA,NA,2021-11-21,FALSE,FALSE,2016,2020,10,10,NA,2016,"it_man_97236@yahoo.com",NA
+"161","2018-0000-0408-0546","Kittleson","Ole",18,"M",NA,NA,NA,2019-11-06,FALSE,FALSE,2018,2019,10,10,NA,0,"oleheather@gmail.com",NA
+"162","2017-0000-0402-3678","Klingler","Andre",18,"M",NA,NA,NA,2021-10-27,FALSE,FALSE,2017,2019,10,10,NA,2017,"Aklingler5106@apps4pps.net",NA
+"163","2016-0000-0388-5010","Kreps","Geoff",57,"M",NA,NA,NA,2019-05-15,FALSE,FALSE,2016,2019,10,10,NA,2016,"geoff.kreps@gmail.com",NA
+"164","2013-0809-0669-2278","Lee","Calvin",53,"M",NA,NA,NA,2021-12-09,FALSE,FALSE,2013,2022,10,10,NA,2013,"calvin.h.lee@gmail.com",NA
+"165","2018-0000-0407-6046","Lemons","Abby",17,"F",NA,NA,NA,2019-10-18,FALSE,FALSE,2018,2018,10,10,NA,0,"abbylemons123@gmail.com",NA
+"166","2016-0000-0389-6537","Levy","Kayim",19,"M",NA,NA,NA,2021-03-20,FALSE,FALSE,2016,2019,10,10,NA,0,"kayimtator@gmail.com",NA
+"167","2019-0000-0412-4818","Lopez roncal","Diego",19,"M",NA,NA,NA,2020-04-28,FALSE,FALSE,2019,2019,10,10,NA,0,"diegolopez408@gmail.com",NA
+"168","2019-0000-0412-7951","Maiden","Ashton",18,"M",NA,NA,NA,2021-07-04,FALSE,FALSE,2019,2019,10,10,NA,0,"maidena@nclack.org",NA
+"169","2018-0000-0405-4726","Mankin","Mark",17,"M",NA,NA,NA,2020-07-07,FALSE,FALSE,2018,2019,10,10,NA,2018,"leonardmankin@yahoo.com",NA
+"170","2017-0000-0402-3882","Martin","Ashley",18,"F",NA,NA,NA,2020-03-10,FALSE,FALSE,2017,2019,10,10,NA,2017,"dj72200@comcast.net",NA
+"171","2009-0705-0155-2390","Mathews","John",51,"M",NA,NA,NA,2019-09-28,FALSE,FALSE,2010,2022,20,20,NA,NA,"jammathews1@hotmail.com",NA
+"172","2019-0000-0411-9098","Mcclure","Cloey",20,"F",NA,NA,NA,2020-06-11,FALSE,FALSE,2019,2019,10,10,NA,0,"cloey@mcclurefamily.biz",NA
+"173","","Morales","Charles",30,"M",NA,NA,NA,2021-09-30,FALSE,FALSE,NA,NA,0,0,NA,2021,"charlesmorales22@yahoo.com",NA
+"174","","Morris","Paul",31,"M",NA,NA,NA,2022-03-08,FALSE,FALSE,NA,NA,NA,NA,NA,NA,"p_morris02@msn.com",NA
+"175","2019-0000-0412-8975","Nelson","Kai",19,"M",NA,NA,NA,2020-03-01,FALSE,FALSE,2019,2020,10,10,NA,0,"kaicnelson@gmail.com",NA
+"176","2016-0000-0381-9916","Nichols","Waylon",19,"M",NA,NA,NA,2020-02-09,FALSE,FALSE,2016,2020,10,10,NA,0,"WaylonNichols@outlook.com",NA
+"177","2016-0000-0387-5228","O'kelly","Aidan",19,"M",NA,NA,NA,2019-11-08,FALSE,FALSE,2016,2019,10,10,NA,2017,"snokelly@gmail.com",NA
+"178","2018-0000-0408-5055","Onofrei","Zachary",15,"M",NA,NA,NA,2021-07-25,FALSE,FALSE,2018,2019,10,10,NA,0,"zach.onofrei@gmail.com",NA
+"179","2019-0000-0411-1280","Orellana thompson","Carlos",17,"M",NA,NA,NA,2019-10-19,FALSE,FALSE,2019,2019,10,10,NA,0,"amyannt@gmail.com",NA
+"180","0021-0040-8554-9860","Owen","Chris",41,"M",NA,NA,NA,2022-02-01,FALSE,FALSE,2011,2020,10,10,NA,2017,"jackcasper49@gmail.com",NA
+"181","2018-0000-0408-0087","Parrish","Mahkai",19,"M",NA,NA,NA,2020-02-24,FALSE,FALSE,2018,2019,10,10,NA,0,"ZPARRISH5070@MSN.COM",NA
+"182","2018-0000-0406-6656","Pasquantonio","Erica",20,"F",NA,NA,NA,2020-06-14,FALSE,FALSE,2018,2019,10,10,NA,0,"pasquantonioe@nclack.org",NA
+"183","2010-0830-2707-4342","Pederson","Nicholas",40,"M",NA,NA,NA,2021-12-12,FALSE,FALSE,2010,2021,10,10,NA,0,"nicpederson@gmail.com",NA
+"184","2016-0000-0381-6425","Prudhomme","Victor",52,"M",NA,NA,NA,2021-10-31,FALSE,FALSE,2016,2022,10,10,2016,2022,"vaprudhomme@comcast.net",NA
+"185","2008-0103-0578-5304","Radheyyan","Ahmad",34,"M",NA,NA,NA,2021-10-23,FALSE,FALSE,2007,2019,NA,NA,NA,NA,"jellydonut52@gmail.com",NA
+"186","2019-0000-0410-6877","Reamer","Sage",17,"F",NA,NA,NA,2021-01-10,FALSE,FALSE,2019,2019,10,10,NA,0,"elr622@gmail.com",NA
+"187","0040-3181-3071-6910","Rosas","Ernesto",72,"M",NA,NA,NA,2021-11-22,FALSE,FALSE,2003,2019,10,10,NA,2016,"ernestorosas01@msn.com",NA
+"188","2016-0000-0387-5194","Rothstein","Bella",20,"F",NA,NA,NA,2021-06-23,FALSE,FALSE,2016,2020,10,10,NA,2017,"bellagrock@gmail.com",NA
+"189","2018-0000-0407-4396","Ruhoff","Ellie",19,"F",NA,NA,NA,2020-02-10,FALSE,FALSE,2018,2019,10,10,NA,0,"ellieruhoff08@gmail.com",NA
+"190","2016-0000-0392-5870","Sanchez","Berly",57,"M",NA,NA,NA,2022-03-08,FALSE,FALSE,2016,2022,10,10,NA,2016,"berlysan@yahoo.com",NA
+"191","2016-0000-0387-4308","Schuh","Theodore",20,"M",NA,NA,NA,2020-02-24,FALSE,FALSE,2016,2020,10,10,NA,2016,"spencerschuh@yahoo.com",NA
+"192","2016-0000-0392-3601","Seigneur","Augustin",18,"M",NA,NA,NA,2020-09-22,FALSE,FALSE,2016,2020,10,10,NA,2017,"augustinseigneur@gmail.com",NA
+"193","2019-0000-0411-7518","Shaheen","Nour",15,"M",NA,NA,NA,2020-03-01,FALSE,FALSE,2019,2019,10,10,NA,0,"nouredeen_y@hotmail.com",NA
+"194","2017-0000-0401-2036","Smithpeter","Cole",18,"M",NA,NA,NA,2021-04-30,FALSE,FALSE,2017,2019,10,10,NA,2017,"csmithpeter@gmail.com",NA
+"195","2014-1113-0148-4606","Snapp","Braeden",20,"M",NA,NA,NA,2020-09-13,FALSE,FALSE,2014,2019,10,10,NA,2015,"kristisnapp@gmail.com",NA
+"196","2018-0000-0409-4438","Snapp","Karlie",16,"F",NA,NA,NA,2020-07-26,FALSE,FALSE,2018,2019,10,10,NA,0,"kristisnapp@gmail.com",NA
+"197","2018-0000-0409-4439","Snapp","Raegan",17,"F",NA,NA,NA,2020-07-26,FALSE,FALSE,2018,2019,10,10,NA,0,"kristisnapp@gmail.com",NA
+"198","2012-1208-0202-5486","Snapp","Terry",50,"M",NA,NA,NA,2020-07-26,FALSE,FALSE,2013,2019,10,10,NA,2017,"tsnapp@gmail.com",NA
+"199","2007-0627-2238-8764","Snelgrow jr.","Daniel",31,"M",NA,NA,NA,2021-09-01,FALSE,FALSE,2007,2020,10,10,NA,2016,"daniel.snelgrow@gmail.com",NA
+"200","2012-1208-0203-1997","Sponsel","Michayla",22,"F",NA,NA,NA,2019-07-27,FALSE,FALSE,2013,2019,10,10,NA,0,"msponsel68@gmail.com",NA
+"201","2013-0327-6164-4081","Stoeff","Alex",22,"M",NA,NA,NA,2021-03-09,FALSE,FALSE,2013,2019,10,10,NA,2013,"svetlaned@yahoo.com",NA
+"202","2012-0630-2833-3215","Taylor","Christopher",23,"M",NA,NA,NA,2019-09-30,FALSE,FALSE,2012,2019,10,10,NA,2012,"taylorch@oregonstate.edu",NA
+"203","2019-0000-0411-7522","Tinawi","Zane",15,"M",NA,NA,NA,2020-02-25,FALSE,FALSE,2019,2019,10,10,NA,0,"kitkatzane2006@gmail.com",NA
+"204","2016-0000-0376-1348","Warner","Logan",20,"M",NA,NA,NA,2021-05-07,FALSE,FALSE,2016,2020,10,10,NA,2017,"loganwarner77@yahoo.com",NA
+"205","2018-0000-0408-1749","Welsh","Ryley",18,"M",NA,NA,NA,2020-01-29,FALSE,FALSE,2018,2020,1,2,2020,2021,"rymanwoo@yahoo.com",NA
+"206","2019-0000-0410-4698","Westerdahl","Ethan",16,"M",NA,NA,NA,2020-05-09,FALSE,FALSE,2019,2019,10,10,NA,0,"gissybella@gmail.com",NA
+"207","2017-0000-0402-8584","Wetzel","Jack",18,"M",NA,NA,NA,2019-10-20,FALSE,FALSE,2017,2018,10,10,NA,0,"jackwetzel0330@gmail.com",NA
+"208","2016-0000-0381-6436","Wilson","Daniel ",20,"M",NA,NA,NA,2020-03-09,FALSE,FALSE,2016,2017,10,10,NA,2014,"danwil711@comcast.net",NA
+"209","2014-0905-0036-8253","Wilson","Jonathan",23,"M",NA,NA,NA,2020-03-09,FALSE,FALSE,2014,2019,10,10,NA,2014,"jonwilson24@comcast.net",NA
+"210","2015-0000-0312-5669","Wilson","Mark",52,"M",NA,NA,NA,2021-06-04,FALSE,FALSE,2015,2019,10,10,NA,2015,"markawilson2914@gmail.com",NA
+"211","2017-0000-0402-8974","Wright","Elijah",18,"M",NA,NA,NA,2019-11-03,FALSE,FALSE,2017,2019,10,10,NA,2017,"batduck08@icloud.com",NA
+"212","2018-0000-0409-5055","Zuccari","Tiago",17,"M",NA,NA,NA,2019-09-22,FALSE,FALSE,2018,2019,10,10,NA,0,"Tzuccari@icloud.com",NA

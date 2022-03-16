@@ -1,0 +1,354 @@
+---
+title: "NCSC Referee Report"
+output:
+  html_notebook: 
+    toc: no
+    code_folding: none
+  pdf_document: 
+    fig_height: 4
+    fig_width: 7
+    toc: yes
+  html_document: default
+---
+```{r setup, include=F}
+library(kableExtra)
+library(scales)
+library(ggplot2)
+library(lubridate)
+library(knitr) %>% suppressWarnings()
+knitr::opts_chunk$set(echo=F)
+theme_set(theme_light())
+
+```
+
+<style type="text/css">
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+.math.display {
+  font-size: 28px;
+}
+</style>
+
+This report was created using data scraped of [Oregon Soccer Central](https://www.oregonsoccercentral.com) as well
+as the registered referees spreadsheets that are distributed by the [Oregon Referee Committe](https://www.oregonreferee.com).
+
+## Summary Information
+
+```{r init, include=F}
+source('lib/ncsc_refs.R')
+session <- create_session('Kayser, Bill')
+
+refs <- read_games(session) |>
+    pivot_longer(all_of(c('Center', 'AR1', 'AR2')),
+                 names_to="Position",
+                 values_to="UID") |>
+    mutate(Year=year(Date)) |>
+    group_by(UID) |>
+    summarize(
+        l7v7 = sum(Game == '7v7'),
+        l9v9 = sum(Game == '9v9'),
+        l11v11 = sum(Game == '11v11'),
+        Center = sum(Position == 'Center'),
+        AR = sum(Position == "AR1" | Position == "AR2"),
+        Fall = sum(Season == 'Fall'),
+        Spring = sum(Season == 'Spring'),
+        GamesIn21 = sum(Year == 2021),
+        GamesIn20 = sum(Year == 2020),
+        GamesIn19 = sum(Year == 2019),
+        GamesIn18 = sum(Year == 2018), 
+        GamesIn17 = sum(Year == 2017),
+        Rank1 = sum(Rank == 1),
+        Rank2 = sum(Rank == 2),
+        Rank3 = sum(Rank == 3),
+        RankOther = sum(Rank > 3),
+        FirstYear = min(Year),
+        LastYear = max(Year),
+        Total=n(),
+    )  |>
+    left_join(x=read_refs(session), by='UID') |>  # read_refs returns refs currently in the org
+    filter(ID != "") |>
+    mutate_at(23:41, \(v) ifelse(is.na(v), 0, v)) |>  # Write zeros into all the NAs introduced in the join.
+    mutate(Current = Registered.2022,
+           Recent = GamesIn21 > 4,
+           New = InitialYear >= 2021 & Total == 0,
+           Inexperienced = Age < 16 | Total <= 8 & (l9v9 + l11v11) == 0)
+    
+```
+
+
+```{r summary}
+n.registered <- nrow(refs)
+n.current <- sum(refs$Current)
+n.current.active2021 <- sum(refs$Current & refs$GamesIn21 > 0)
+n.active2021 <- sum(refs$GamesIn21)
+```
+
+Right now there are **`r n.registered`** referees listed in our organization. 
+
+Of those, **`r n.current`** have 2022 registrations completed.  Of currently registered refs, **`r n.current.active2021`** worked games in 2021.
+
+In total, there have been **`r n.active2021`** referees who were active in 2021 or 2022.
+
+Of the `r sum(refs$Recent)` refs who have worked at least 4 games since 2021, `r sum(refs$Recent & refs$Gender == 'F')` identify as female.
+
+Here is a breakdown of the crew officiating games since 2017.  Note there were no games in 2020 because of the pandemic.  Also note that 
+this only includes referees who were registered in 2019 or later.
+
+```{r gender}
+margins <- filter(refs, LastYear >= 2017) |>
+    select(Gender, Age, starts_with('GamesIn')) |>
+    pivot_longer(cols=starts_with('GamesIn'), values_to="Games") |>
+    mutate(Year = str_match(name, "GamesIn(..)")[,2] |> as.integer() + 2000) |>
+    select(-name)
+
+group_by(margins, Gender, Year) |>
+    summarize(Games = sum(Games)) |>
+    ggplot() +
+        aes(fill=Gender, x=Year, y=Games) +
+    geom_col() +
+    ggtitle("Officiating Positions by Gender",
+            "Count of positions (Center, ARs) paid by NCSC") +
+    xlab(NULL) + ylab(NULL)
+
+```
+
+## Data Doctor
+
+I ran these scripts to update data on [http://www.oregonsoccercentral.com].  The changes have already been applied so there shouldn't be any more adjustments needed.
+
+--------
+
+For refs that have actually worked games for us, the `FirstYear` and `LastYear` fields will reflect games actually worked. 
+If our manually entered `InitialYear` and `CurrentYear` don't align with actual games worked, we can fix that.
+
+```{r fixit1, message=FALSE, warning=FALSE, include=FALSE}
+# Find refs who have worked games where the initial year does not line up, or the current year needs to be moved up.
+misaligned.refs <- 
+    filter(refs,
+           (Total > 0) & 
+               (is.na(Org.InitialYear) | 
+                    is.na(Org.CurrentYear) |
+                    FirstYear != Org.InitialYear | 
+                    LastYear > Org.CurrentYear)) |>
+    mutate(Prev.InitialYear = Org.InitialYear,
+           Prev.CurrentYear = Org.CurrentYear,
+           Org.InitialYear = FirstYear,
+           Org.CurrentYear = ifelse(is.na(Org.CurrentYear), LastYear, pmax(Org.CurrentYear, LastYear)))
+
+updateRefDetails(session, misaligned.refs)
+```
+
+Refs needing adjustment: `r nrow(misaligned.refs)`
+
+
+Some refs had their Current Year entered but not the initial year.  Maybe when setting up the ref initially, we just didn't bother setting this field.  For these situations, I'll assume the Initial Year is the same as the Current Year.
+
+```{r fixit2, include=FALSE}
+# Find refs who have worked games where the initial year does not line up, or the current year needs to be moved up.
+refs.InitialYear.missing <- 
+    filter(refs,
+           is.na(Org.InitialYear) & !is.na(Org.CurrentYear)) |>
+    mutate(Org.InitialYear = Org.CurrentYear)
+
+
+updateRefDetails(session, refs.InitialYear.missing)
+ 
+```
+
+Refs needing adjustment: `r nrow(refs.InitialYear.missing)`
+
+
+Some refs did not get their ranks set.  These will show up as NA or 0.  Let's default the Center rank to 1 (7v7) and AR to 2 (9v9)
+
+```{r fixit3, include=FALSE}
+# Find refs who have worked games where the initial year does not line up, or the current year needs to be moved up.
+refs.Ranks.missing <- 
+    filter(refs,
+           is.na(Rank.Center) | is.na(Rank.AR) | Rank.Center == 0 | Rank.AR == 0) |>
+    mutate(Rank.Center = ifelse(is.na(Rank.Center) | Rank.Center == 0, 1, Rank.Center),
+           Rank.AR = ifelse(is.na(Rank.AR) | Rank.AR == 0, 1, Rank.AR))
+
+updateRefDetails(session, refs.Ranks.missing)
+ 
+```
+
+Refs needing adjustment: `r nrow(refs.Ranks.missing)`
+
+## Refs by Experience
+
+Here is the list of the top 50 refs by number of games.
+
+```{r toprefs}
+
+arrange(refs, desc(Total)) |>
+    head(50) |>
+    select(Name = FullName, Age, `Total Games`=Total, `11v11`=l11v11, `9v9`=l9v9, `7v7`=l7v7, `Reg 22?`=Registered.2022, 
+           `Most Recent Year`=LastYear, `Last Logged In`=LastLogin) |>
+    kbl() |>
+    # column_spec(7, width = "5cm") |>
+    kable_styling(bootstrap_options = c("striped", "hover"), full_width = T) 
+
+```
+## Distribution Lists
+
+Send out email in groups:
+
+```{r filtering}
+
+refs.current <- filter(refs, Registered.2022)
+
+refs.current.active        <- filter(refs, Current & Recent)     
+refs.current.new           <- filter(refs, Current & !Recent & New)
+refs.current.inactive      <- filter(refs,
+                                     Current & 
+                                         LastYear >= 2019 &
+                                         !(UID %in% refs.current.active$UID))
+
+refs.notcurrent.active     <- filter(refs, !Current & Recent)
+refs.notcurrent.new        <- filter(refs, !Current & !Recent & New)
+refs.notcurrent.inactive   <- filter(refs, !Current & !Recent & !New &
+                                         LastYear >= 2019 &
+                                         LastLogin > mdy("5/1/2021"))
+                                     
+potential.ids <- c(refs.current.active$ID, refs.current.new$ID, refs.current.inactive$ID,
+                   refs.notcurrent.active$ID, refs.notcurrent.new$ID, refs.notcurrent.inactive$ID)
+potential.ids <- potential.ids[!duplicated(potential.ids)]
+refs.unlikely <- filter(refs, !(ID %in% potential.ids))
+                                         
+                                     
+```
+There are `r length(potential.ids)` referees to communicate with:
+
+* Currently Registered Grassroots Refs (details on club, dates, etc) - **`r sum(refs$Current)`**
+   * Recent refs who are likely to come back for Spring - **`r nrow(refs.current.active)`**
+   * Brand new certified refs - **`r nrow(refs.current.new)`**
+   * Remaining refs that have done some games in 20-21 at least - **`r nrow(refs.current.inactive)`**.
+* Out of date Grassroots registrations (encourage to re-register) - **`r sum(!refs$Current & refs$Total > 0)`**
+   * Recent refs who are likely to come back - **`r nrow(refs.notcurrent.active)`**
+   * Refs that are recently certified but have not updated their registration and still have not done games with us - **`r nrow(refs.notcurrent.new)`**
+   * Refs that have done at least one game in 20-21 but are not already included above - **`r nrow(refs.notcurrent.inactive)`**
+
+There are `r nrow(refs.unlikely)` refs who will just be asked if they want to be removed.
+
+### Current 2022 Referees
+
+These are all refs who have up to date registration and ready to play this spring.
+
+#### Up-to-date Active Refs
+
+These are refs who did at least 4 games in 2021 and have updated their registration.  They are the most likely candidates for
+taking games this year.  There are `r nrow(refs.current.active)`.
+
+```{r current_active}
+
+arrange(refs.current.active,
+        desc(InitialYear), Age, FullName ) |>
+select(Name=FullName, Gender, Age, City, `Reg. Since`=InitialYear,  `Games to Date`=Total, `Signup Notes`=Notes.Self) |>
+    kbl() |>
+    column_spec(7, width = "5cm") |>
+    kable_styling(bootstrap_options = c("striped", "hover"), full_width = T) 
+```
+
+```
+`r generateEmailTo(refs.current.active)`
+```
+
+#### Brand New Certified Refs
+
+These are refs who got certified in 2021 but have not done games for us yet.
+
+```{r current_new}
+
+arrange(refs.current.new,
+        desc(InitialYear), Age, FullName ) |>
+select(Name=FullName, Gender, Age, City, `Reg. Since`=InitialYear,  `Games to Date`=Total, `Signup Notes`=Notes.Self) |>
+    kbl() |>
+    column_spec(7, width = "5cm") |>
+    kable_styling(bootstrap_options = c("striped", "hover"), full_width = T) 
+
+```
+```
+`r generateEmailTo(refs.current.new)`
+```
+
+
+#### Other Likely Candidates
+
+These are refs that have done games in 20 or 21 and not already listed above.
+
+```{r current_inactive}
+arrange(refs.current.inactive,
+        desc(Total), Age, FullName ) |>
+select(Name=FullName, Gender, Age, City, `Reg. Since`=InitialYear,  `Games to Date`=Total, `Signup Notes`=Notes.Self) |>
+    kbl() |>
+    column_spec(7, width = "5cm") |>
+    kable_styling(bootstrap_options = c("striped", "hover"), full_width = T) 
+
+
+```
+```
+`r generateEmailTo(refs.current.inactive)`
+```
+
+### Refs with Out-of-date Registration
+
+These refs have not update their registration at this time but still have potential to do games in Spring.
+
+#### Active Refs
+
+```{r notcurrent_active}
+arrange(refs.notcurrent.active ,
+        desc(Total), desc(Age), FullName ) |>
+select(Name=FullName, Gender, Age, City, `Reg. Since`=InitialYear,  `Games to Date`=Total, `Signup Notes`=Notes.Self) |>
+    kbl() |>
+    column_spec(7, width = "5cm") |>
+    kable_styling(bootstrap_options = c("striped", "hover"), full_width = T) 
+```
+```
+`r generateEmailTo(refs.notcurrent.active)`
+```
+
+
+#### New Refs
+
+```{r notcurrent_new}
+arrange(refs.notcurrent.new ,
+        desc(Total), desc(Age), FullName ) |>
+select(Name=FullName, Gender, Age, City, `Reg. Since`=InitialYear,  `Games to Date`=Total, `Signup Notes`=Notes.Self) |>
+    kbl() |>
+    column_spec(7, width = "5cm") |>
+    kable_styling(bootstrap_options = c("striped", "hover"), full_width = T) 
+```
+```
+`r generateEmailTo(refs.notcurrent.new)`
+```
+
+#### Inactive Refs
+
+These refs are not currently registered but have done some games at least since 2019 and are not in one of the groups above.
+
+```{r notcurrent_inactive}
+arrange(refs.notcurrent.inactive ,
+        desc(Total), desc(Age), FullName ) |>
+select(Name=FullName, Gender, Age, City, `Reg. Since`=InitialYear,  `Games to Date`=Total, `Signup Notes`=Notes.Self) |>
+    kbl() |>
+    column_spec(7, width = "5cm") |>
+    kable_styling(bootstrap_options = c("striped", "hover"), full_width = T) 
+```
+```
+`r generateEmailTo(refs.notcurrent.inactive)`
+```
+
+
+### Completely Inactive
+
+These are all of the refs in our organization who don't fit one of the categories above.  Generally they probably signed up years ago
+and never bothered to take games.  I'll send an email out just seeing if they want to stay in the org.
+
+```
+`r generateEmailTo(refs.unlikely)`
+```
+
