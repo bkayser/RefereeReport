@@ -79,7 +79,7 @@ read_refs <- function(session, org=2820) {
                Email, SecondaryEmail, 
                LastLogin, InitialYear, CurrentYear, Grade, Rank.Center, Rank.AR, Org.InitialYear, Org.CurrentYear,
                Notes.Self, Notes.Assignor) |>
-        left_join(select(referee_database(), ID, reg.21, reg.22),
+        left_join(referee_database(),
                   by="ID")
     
 

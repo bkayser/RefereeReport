@@ -1,0 +1,68 @@
+---
+title: "Schedule"
+output:
+  html_notebook: 
+    toc: no
+    code_folding: none
+  pdf_document: 
+    fig_height: 4
+    fig_width: 7
+    toc: yes
+  html_document: default
+---
+```{r setup, include=F}
+library(kableExtra)
+library(scales)
+library(ggplot2)
+library(lubridate)
+library(knitr) %>% suppressWarnings()
+knitr::opts_chunk$set(echo=F)
+theme_set(theme_light())
+
+```
+
+<style type="text/css">
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+.math.display {
+  font-size: 28px;
+}
+</style>
+
+
+```{r init}
+
+sched <- readxl::read_excel("~/My Drive/Soccer/Soccer Coaching/Soccer-5 -- 04-06  4pm.xlsx") |>
+    arrange(Day) |>
+    mutate(Day=strftime(Day, "%a %b %d"))
+
+filter(sched, `Home Team` == 'NCSC - BG08 - Kayser' | Visitors == 'NCSC - BG08 - Kayser') |>
+    select(Day,
+           Time,
+           Venue,
+           `Home Team`,
+           Visitors) |>
+    kbl() |>
+    # column_spec(7, width = "5cm") |>
+    kable_styling(bootstrap_options = c("striped", "hover"), full_width = T) 
+```
+
+
+```{r homes}
+filter(sched,
+       `HOST CLUB` == 'N Clackamas') |>
+    select(Day,
+           Time,
+           Venue,
+           `Field #`,
+           `Home Team`,
+           `Visitors`) |>
+  kbl() |>
+    column_spec(1, width = "2cm") |>
+    column_spec(2, width = "2cm") |>
+    kable_styling(bootstrap_options = c("striped", "hover"), full_width = T) 
+
+```
