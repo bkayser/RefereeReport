@@ -46,12 +46,14 @@ read_refs <- function(session, org=2820) {
         lapply(users_table, \(row) {
             cells <- html_elements(row, css="td")
             email <- html_text(cells[6])
+            phone <- html_text(cells[7])
             list(
                 UID = html_text(cells[2]) |> parseint(),
                 Name = html_text(cells[3]),
                 City = html_text(cells[4]),
                 Email = str_match(email, "^\\s*(\\S*)\\s")[,2],
                 SecondaryEmail = str_match(email,"\\n.*\\n\\s*(\\S+)\\s*$")[,2],
+                Cell = str_match(phone, "Cell: (.*)$")[,2],
                 Age = html_text(cells[9]) |> parseint(),
                 Gender = html_text(cells[8]),
                 LastLogin = html_text(cells[10]) |> lubridate::mdy(),
@@ -76,7 +78,7 @@ read_refs <- function(session, org=2820) {
         select(orgrefs, 
                ID, UID, 
                LastName, FirstName, FullName, City, Age, Gender,
-               Email, SecondaryEmail, 
+               Email, SecondaryEmail, Cell,
                LastLogin, InitialYear, CurrentYear, Grade, Rank.Center, Rank.AR, Org.InitialYear, Org.CurrentYear,
                Notes.Self, Notes.Assignor) |>
         left_join(referee_database(),
@@ -90,7 +92,7 @@ read_refs <- function(session, org=2820) {
                    Registered.2022=falseIfNA(reg.22)) |>
             select(ID, UID, LastName, FirstName, FullName, Age, Gender, City, LastLogin, Registered.2021, Registered.2022, 
                    InitialYear, CurrentYear, Grade, Rank.Center, Rank.AR, 
-                   Org.InitialYear, Org.CurrentYear, Email, SecondaryEmail,
+                   Org.InitialYear, Org.CurrentYear, Email, SecondaryEmail, Cell,
                    Notes.Self, Notes.Assignor)
     )
 }
@@ -105,7 +107,9 @@ LevelMap <- list (
     `3rd Grade` = "7v7",
     `4th Grade` = "7v7",
     `5th Grade` = "9v9",
+    `5th-6th Grade` = "9v9",
     `6th Grade` = "9v9",
+    `7th-8th Grade` = "11v11",
     `8th Grade` = "11v11",
     `U09` = "7v7",
     `U09 7v7` =  "7v7",
@@ -125,9 +129,12 @@ lookupGame <- function(level) {
     return(sapply(level, \(v) { as.character(LevelMap[v])}))
 }
 
-
 read_games <- function(session, org=2820) {
-    # showResultsPage: 2
+    
+    game_cache <- cache('games', org)
+    today <- as.character(Sys.Date())
+    games <- game_cache$get(org)
+    if (!is.null(games)) return(games)
     pageNo <- 1
     pageSize <- 1000
     rows <- list()
@@ -167,22 +174,25 @@ read_games <- function(session, org=2820) {
         pageNo <- pageNo + 1
     }
     
-    lapply(rows, \(row) {
-        cells <- html_children(row)
-        list(
-            Date = html_text(cells[3]) |> mdy(),
-            Level = html_text(cells[4]),
-            Season = html_text(cells[6]),
-            Rank = html_text(cells[7]) |> parseint(),
-            Center = parse_ref_id(cells[8]),
-            AR1 = parse_ref_id(cells[9]),
-            AR2 = parse_ref_id(cells[10])            
-        )
-    }) |> 
+    games <- 
+        lapply(rows, \(row) {
+            cells <- html_children(row)
+            list(
+                Date = html_text(cells[3]) |> mdy(),
+                Level = html_text(cells[4]),
+                Season = html_text(cells[6]),
+                Rank = html_text(cells[7]) |> parseint(),
+                Center = parse_ref_id(cells[8]),
+                AR1 = parse_ref_id(cells[9]),
+                AR2 = parse_ref_id(cells[10])            
+            )
+        }) |> 
         bind_rows() |>
         mutate(Level = as.factor(Level),
                Season = as.factor(Season),
                Game = lookupGame(Level))
+    game_cache$put(today, games)
+    return(games)
 }
 
 # This will do a bulk update of the refs in the table using:

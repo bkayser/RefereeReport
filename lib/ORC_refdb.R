@@ -4,7 +4,7 @@ library(rvest)
 # Return the spreadsheet DB of referees
 referee_database.2022 <- function() {
     return(
-        read_csv("data/Active Referees_March 29.csv", show_col_types = FALSE) |>
+        read_csv("data/Active Referees_April 19.csv", show_col_types = FALSE) |>
             select(ID=`USSF-Id`) |>
             unique() |>
             mutate(reg.22=T)

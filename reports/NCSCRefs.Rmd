@@ -46,11 +46,12 @@ refs <- read_games(session) |>
                  names_to="Position",
                  values_to="UID") |>
     mutate(Year=year(Date)) |>
+    filter(!is.na(UID)) |>
     group_by(UID) |>
     summarize(
-        l7v7 = sum(Game == '7v7'),
-        l9v9 = sum(Game == '9v9'),
-        l11v11 = sum(Game == '11v11'),
+        Center.7v7 = sum(Game == '7v7'),
+        Center.9v9 = sum(Game == '9v9' & Position == 'Center'),
+        Center.11v11 = sum(Game == '11v11' & Position == 'Center'),
         Center = sum(Position == 'Center'),
         AR = sum(Position == "AR1" | Position == "AR2"),
         Fall = sum(Season == 'Fall'),
@@ -70,11 +71,11 @@ refs <- read_games(session) |>
     )  |>
     left_join(x=read_refs(session), by='UID') |>  # read_refs returns refs currently in the org
     filter(ID != "") |>
-    mutate_at(23:41, \(v) ifelse(is.na(v), 0, v)) |>  # Write zeros into all the NAs introduced in the join.
+    mutate_at(24:42, \(v) ifelse(is.na(v), 0, v)) |>  # Write zeros into all the NAs introduced in the join.
     mutate(Current = Registered.2022,
            Recent = GamesIn21 > 4,
            New = InitialYear >= 2021 & Total == 0,
-           Inexperienced = Age < 16 | Total <= 8 & (l9v9 + l11v11) == 0)
+           Inexperienced = Age < 18 & (Center.9v9 + Center.11v11) == 0)
     
 ```
 
@@ -143,6 +144,7 @@ updateRefDetails(session, misaligned.refs)
 
 Refs needing adjustment: `r nrow(misaligned.refs)`
 
+---------
 
 Some refs had their Current Year entered but not the initial year.  Maybe when setting up the ref initially, we just didn't bother setting this field.  For these situations, I'll assume the Initial Year is the same as the Current Year.
 
@@ -160,6 +162,7 @@ updateRefDetails(session, refs.InitialYear.missing)
 
 Refs needing adjustment: `r nrow(refs.InitialYear.missing)`
 
+-------
 
 Some refs did not get their ranks set.  These will show up as NA or 0.  Let's default the Center rank to 1 (7v7) and AR to 2 (9v9)
 
@@ -177,6 +180,7 @@ updateRefDetails(session, refs.Ranks.missing)
 
 Refs needing adjustment: `r nrow(refs.Ranks.missing)`
 
+
 ## Refs by Experience
 
 Here is the list of the top 50 refs by number of games.
@@ -185,7 +189,8 @@ Here is the list of the top 50 refs by number of games.
 
 arrange(refs, desc(Total)) |>
     head(50) |>
-    select(Name = FullName, Age, `Total Games`=Total, `11v11`=l11v11, `9v9`=l9v9, `7v7`=l7v7, `Reg 22?`=Registered.2022, 
+    select(Name = FullName, Age, `Total Games`=Total, `Centers`=Center, 
+           `Centers 11v11` = Center.11v11, `Reg 22?`=Registered.2022, 
            `Most Recent Year`=LastYear, `Last Logged In`=LastLogin) |>
     kbl() |>
     # column_spec(7, width = "5cm") |>
@@ -233,6 +238,56 @@ There are `r length(potential.ids)` referees to communicate with:
 
 There are `r nrow(refs.unlikely)` refs who will just be asked if they want to be removed.
 
+### Need Centers for This Weekend
+
+These are refs who are registered, have Centered 9v9 or above, and have done at least 1 game in 2021
+
+```{r centersneeded}
+immediate.centers <- filter(refs.current, 
+                            LastYear >= 2021 & Center > 0) |>
+    arrange(desc(Center.11v11), desc(Center.9v9), desc(Center.7v7)) 
+
+select(immediate.centers,
+       Name=FullName, 
+       Age, 
+       `Rank`=Rank.Center, 
+       `11v11 Center`=Center.11v11, 
+       `9v9 Center`=Center.9v9, 
+       `7v7 Center`=Center.7v7,
+       `Spring Games`=Spring, 
+       Cell) |> 
+    kbl() |>
+    #    column_spec(7, width = "5cm") |>
+    kable_styling(bootstrap_options = c("striped", "hover"), full_width = T) 
+
+```
+
+```
+`r generateEmailTo(immediate.centers)`
+```
+
+### Need ARs for Upcoming Games
+
+```{r need-ars}
+immediate.ars <- filter(refs.current, 
+                        LastYear >= 2021 &  !(UID %in% immediate.centers$UID)) |>
+    arrange(desc(AR)) 
+
+select(immediate.ars,
+       Name=FullName, 
+       Age, 
+       `AR Rank`= Rank.AR, 
+       `AR Assignments`= AR,
+       `Spring Games`=Spring, 
+       Cell) |>
+    kbl() |>
+    kable_styling(bootstrap_options = c("striped", "hover"), full_width = T) 
+```
+
+```
+`r generateEmailTo(immediate.ars)`
+```
+
 ### Current 2022 Referees
 
 These are all refs who have up to date registration and ready to play this spring.
@@ -261,7 +316,6 @@ select(Name=FullName, Gender, Age, City, `Reg. Since`=InitialYear,  `Games to Da
 These are refs who got certified in 2021 but have not done games for us yet.
 
 ```{r current_new}
-
 arrange(refs.current.new,
         desc(InitialYear), Age, FullName ) |>
 select(Name=FullName, Gender, Age, City, `Reg. Since`=InitialYear,  `Games to Date`=Total, `Signup Notes`=Notes.Self) |>
