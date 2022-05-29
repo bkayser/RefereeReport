@@ -56,6 +56,7 @@ refs <- read_games(session) |>
         AR = sum(Position == "AR1" | Position == "AR2"),
         Fall = sum(Season == 'Fall'),
         Spring = sum(Season == 'Spring'),
+        GamesIn22 = sum(Year == 2022),
         GamesIn21 = sum(Year == 2021),
         GamesIn20 = sum(Year == 2020),
         GamesIn19 = sum(Year == 2019),
@@ -71,7 +72,7 @@ refs <- read_games(session) |>
     )  |>
     left_join(x=read_refs(session), by='UID') |>  # read_refs returns refs currently in the org
     filter(ID != "") |>
-    mutate_at(24:42, \(v) ifelse(is.na(v), 0, v)) |>  # Write zeros into all the NAs introduced in the join.
+    mutate_at(24:43, \(v) ifelse(is.na(v), 0, v)) |>  # Write zeros into all the NAs introduced in the join.
     mutate(Current = Registered.2022,
            Recent = GamesIn21 > 4,
            New = InitialYear >= 2021 & Total == 0,
@@ -197,6 +198,26 @@ arrange(refs, desc(Total)) |>
     kable_styling(bootstrap_options = c("striped", "hover"), full_width = T) 
 
 ```
+
+## Spring '22 Summary
+
+```{r spring22}
+
+filter(refs, GamesIn22 > 0) |>
+    arrange(desc(GamesIn22)) |>
+    mutate(Rank = str_c(Rank.Center, '/', Rank.AR)) |>
+    select(Games = GamesIn22,
+           FullName,
+           Age,
+           Gender,
+           City,
+           Rank) |>
+    kbl() |>
+    kable_styling(bootstrap_options = c("striped", "hover"), full_width = T) 
+
+
+```
+
 ## Distribution Lists
 
 Send out email in groups:

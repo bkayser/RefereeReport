@@ -1,6 +1,7 @@
 library(tidyverse)
 library(rvest)
 source('lib/utils.R')
+source('lib/RefereeDB.R')
 # Utility functions to suspport reports
 
 # Make sure you call this the first time with the username and password arguments.  
@@ -13,7 +14,7 @@ source('lib/utils.R')
 #
 collect_ref_data <- function(referee_name, username=NULL, password=NULL) {
     
-    session <- create_session(username, password)
+    session <- create_session(referee_name, username, password)
 
     orgs.all <- organizations(session)
    
@@ -55,7 +56,7 @@ collect_ref_data <- function(referee_name, username=NULL, password=NULL) {
             level = factor(level, ordered_levels, ordered = T) |> fct_drop())
         
     return(list(games=games,
-                referees=referee_list(session, orgs.all),
+                referees=osc_refs(session, orgs.all),
                 ref=ref$ref))
 }
 
@@ -72,6 +73,8 @@ organizations <- function(session) {
     
 }
 
+# Execute a search for games in which the session user was assigned.  
+# Return a vector of game ids
 all_game_ids <- function(session, orgs){
     page_size <- 1000
     game_search <- session_jump_to(session, "https://www.oregonsoccercentral.com/OSICORE/game/assignment.php")
@@ -180,52 +183,12 @@ game_details <- function(session, game, friendly_name) {
     return(details)
 }
 
-
-# Return the list of all referees for selection joined with the referee database
-# The complete referee list may not have the details from the spreadsheet of active refs
-referee_list <- function(session, org_ids) {
-    misc_cache <- cache('misc')
-    cache_key <- str_c('referees_',
-                       cli::hash_md5(str_c(as.character(sort(org_ids)), collapse=",")))
-    refs <- misc_cache$get(cache_key)
-    if (is.null(refs)) {
-        # Get the reference data for type = level, referee
-        resp <- httr::POST("https://www.oregonsoccercentral.com/OSICORE/game/ajax.php", 
-                           encode="form",
-                           body=list(action= "lookUpSearchField",
-                                     type='referee',
-                                     orgIDs=str_c(org_ids, collapse=",")),
-                           config=session$config,
-                           handle = session$handle)
-        refs <- tibble()
-        for (entry in html_elements(httr::content(resp), css='referee')) {
-            refs <- bind_rows(refs,
-                              list(name = html_text(html_element(entry, css="value")),
-                                   id = as.integer(html_text(html_element(entry, css="id")))))
-            
-            
-        }
-        refs <- bind_cols(refs,
-                          as_tibble(str_split_fixed(refs$name, ", ", 2)))
-        names(refs) <- c('Name', 'UID', 'LastName', 'FirstName')
-        refs <- mutate(refs,
-                       FullName =  str_to_title(str_c(FirstName, ' ', LastName)))
-        misc_cache$put(cache_key, refs)
-    }
-    
-    return(
-        select(refs, UID, FullName) |> 
-            left_join(referee_database(), by='FullName') |>
-            mutate(Name=str_c(LastName, ", ", FirstName)) |>
-            select(ID, UID, everything())
-    )
-        
-}
 referee <- function(session,
                     org_ids,
                     referee_name) {
     referee_id <- NULL
-    refs <- referee_list(session, org_ids)
+    refs <- osc_refs(session, org_ids) |> 
+        mutate(Name = str_c(LastName, ", ", FirstName))
     ref <- filter(refs, Name == referee_name)
     if (is_empty(ref)) {
         stop("Cannot find id of ", referee_name)
@@ -233,7 +196,7 @@ referee <- function(session,
     referee_name <- ref$Name
     return(list(referee_id = ref$ID,
                 referee_name = ref$Name,
-                friendly_name = ref$FriendlyName,
+                friendly_name = ref$FullName,
                 ref = ref))
 }
 
