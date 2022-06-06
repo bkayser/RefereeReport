@@ -139,7 +139,7 @@ read_osc_refs <- function(session, orgs) {
                 rec$Org.CurrentYear <- html_text(cells[20])
             }
             return(rec)
-        }) |> 
+        }) |>
         bind_rows() |>
         mutate(LastName = str_match(Name, "^(.*),")[,2],
                FirstName = str_match(Name, ",.(.*)")[,2],
@@ -153,8 +153,8 @@ read_osc_refs <- function(session, orgs) {
     
     if (length(orgs) == 1) {
         orgrefs <- mutate(orgrefs,
-                          across(starts_with("Rank"), parseint()),
-                          across(starts_with("Org."), parseint()))
+                          across(starts_with("Rank"), parseint),
+                          across(starts_with("Org"), parseint))
     }
     return(orgrefs)
 }

@@ -1,13 +1,13 @@
 ---
 title: "Referee Report"
 output:
+  html_notebook: 
+    toc: no
+    code_folding: none
   pdf_document: 
     fig_height: 4
     fig_width: 7
     toc: yes
-  html_notebook: 
-    toc: no
-    code_folding: none
   html_document: default
 echo: FALSE
 ---
@@ -28,7 +28,7 @@ echo: FALSE
 library(tidyverse)
 library(knitr) %>% suppressWarnings()
 theme_set(theme_light())
-source('referee_data.R')
+source('lib/referee_data.R')
 
 name <- 'Kayser, Bill'
 username <- NULL

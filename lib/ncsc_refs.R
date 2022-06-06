@@ -41,7 +41,7 @@ read_games <- function(session, org=2820) {
     
     game_cache <- cache('games', org)
     today <- as.character(Sys.Date())
-    games <- game_cache$get(org)
+    games <- game_cache$get(today)
     if (!is.null(games)) return(games)
     pageNo <- 1
     pageSize <- 1000
@@ -101,6 +101,39 @@ read_games <- function(session, org=2820) {
                Game = lookupGame(Level))
     game_cache$put(today, games)
     return(games)
+}
+
+season_summary <- function(session, begin_date=mdy("1/1/2010"), end_date = Sys.Date()) {
+    
+    refs <- read_games(session) |>
+        pivot_longer(all_of(c('Center', 'AR1', 'AR2')),
+                     names_to="Position",
+                     values_to="UID") |>
+        mutate(Year=year(Date), Years=year(Date)) |>
+        filter(!is.na(UID) & Date >= begin_date & Date <= end_date) |>
+        pivot_wider(names_from=Years, values_from=Years, values_fn=length, names_prefix='GamesIn', values_fill=0) |>
+        group_by(UID) |>
+        summarize(
+            Center.7v7 = sum(Game == '7v7'),
+            Center.9v9 = sum(Game == '9v9' & Position == 'Center'),
+            Center.11v11 = sum(Game == '11v11' & Position == 'Center'),
+            Center = sum(Position == 'Center'),
+            AR = sum(Position == "AR1" | Position == "AR2"),
+            Fall = sum(Season == 'Fall'),
+            Spring = sum(Season == 'Spring'),
+            across(starts_with("GamesIn"), sum),
+            Rank1 = sum(Rank == 1),
+            Rank2 = sum(Rank == 2),
+            Rank3 = sum(Rank == 3),
+            RankOther = sum(Rank > 3),
+            FirstYear = min(Year),
+            LastYear = max(Year),
+            Total=n(),
+        )  |>
+        right_join(x=osc_refs(session), by='UID') |>  # read_refs returns refs currently in the org
+        filter(ID != "") |>
+        mutate(across(!(1:23), \(v) ifelse(is.na(v), 0, v)))  # Write zeros into all the NAs introduced in the join.
+    return(refs)
 }
 
 # This will do a bulk update of the refs in the table using:

@@ -45,8 +45,10 @@ refs <- read_games(session) |>
     pivot_longer(all_of(c('Center', 'AR1', 'AR2')),
                  names_to="Position",
                  values_to="UID") |>
-    mutate(Year=year(Date)) |>
+    mutate(Year=year(Date),
+           Years=year(Date)) |>
     filter(!is.na(UID)) |>
+    pivot_wider(names_from=Years, values_from=Years, values_fn=length, names_prefix='GamesIn', values_fill=0) |>
     group_by(UID) |>
     summarize(
         Center.7v7 = sum(Game == '7v7'),
@@ -56,12 +58,7 @@ refs <- read_games(session) |>
         AR = sum(Position == "AR1" | Position == "AR2"),
         Fall = sum(Season == 'Fall'),
         Spring = sum(Season == 'Spring'),
-        GamesIn22 = sum(Year == 2022),
-        GamesIn21 = sum(Year == 2021),
-        GamesIn20 = sum(Year == 2020),
-        GamesIn19 = sum(Year == 2019),
-        GamesIn18 = sum(Year == 2018), 
-        GamesIn17 = sum(Year == 2017),
+        across(starts_with("GamesIn"), sum),
         Rank1 = sum(Rank == 1),
         Rank2 = sum(Rank == 2),
         Rank3 = sum(Rank == 3),
@@ -70,22 +67,21 @@ refs <- read_games(session) |>
         LastYear = max(Year),
         Total=n(),
     )  |>
-    left_join(x=read_refs(session), by='UID') |>  # read_refs returns refs currently in the org
+    left_join(x=osc_refs(session), by='UID') |>  # read_refs returns refs currently in the org
     filter(ID != "") |>
-    mutate_at(24:43, \(v) ifelse(is.na(v), 0, v)) |>  # Write zeros into all the NAs introduced in the join.
+    mutate(across(!(1:23), \(v) ifelse(is.na(v), 0, v))) |> # Write zeros into all the NAs introduced in the join.
     mutate(Current = Registered.2022,
-           Recent = GamesIn21 > 4,
+           Recent = GamesIn2021 > 4,
            New = InitialYear >= 2021 & Total == 0,
            Inexperienced = Age < 18 & (Center.9v9 + Center.11v11) == 0)
-    
 ```
 
 
 ```{r summary}
 n.registered <- nrow(refs)
 n.current <- sum(refs$Current)
-n.current.active2021 <- sum(refs$Current & refs$GamesIn21 > 0)
-n.active2021 <- sum(refs$GamesIn21)
+n.current.active2021 <- sum(refs$Current & refs$GamesIn2021 > 0)
+n.active2021 <- sum(refs$GamesIn2021)
 ```
 
 Right now there are **`r n.registered`** referees listed in our organization. 
@@ -103,13 +99,13 @@ this only includes referees who were registered in 2019 or later.
 margins <- filter(refs, LastYear >= 2017) |>
     select(Gender, Age, starts_with('GamesIn')) |>
     pivot_longer(cols=starts_with('GamesIn'), values_to="Games") |>
-    mutate(Year = str_match(name, "GamesIn(..)")[,2] |> as.integer() + 2000) |>
+    mutate(Year = str_match(name, "GamesIn(....)")[,2] |> as.integer()) |>
     select(-name)
 
 group_by(margins, Gender, Year) |>
     summarize(Games = sum(Games)) |>
     ggplot() +
-        aes(fill=Gender, x=Year, y=Games) +
+        aes(fill=Gender, x=as.factor(Year), y=Games) +
     geom_col() +
     ggtitle("Officiating Positions by Gender",
             "Count of positions (Center, ARs) paid by NCSC") +
@@ -202,11 +198,13 @@ arrange(refs, desc(Total)) |>
 ## Spring '22 Summary
 
 ```{r spring22}
-
-filter(refs, GamesIn22 > 0) |>
-    arrange(desc(GamesIn22)) |>
+season_summary(session, begin_date=mdy("3/1/2022"), end_date=mdy("6/14/2022")) |>
+    arrange(desc(Total)) |>
+    filter(Total > 0) |>
     mutate(Rank = str_c(Rank.Center, '/', Rank.AR)) |>
-    select(Games = GamesIn22,
+    select(Total,
+           Center,
+           AR,
            FullName,
            Age,
            Gender,
