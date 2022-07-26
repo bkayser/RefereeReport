@@ -4,7 +4,7 @@ library(rvest)
 # Return the spreadsheet DB of referees
 referee_database.2022 <- function() {
     return(
-        readxl::read_xlsx("data/Active Referees_May 24.xlsx") |>
+        readxl::read_xlsx("data/Active Referees - July 12.xlsx") |>
             select(ID=`USSF-Id`) |>
             unique() |>
             mutate(reg.22=T)
@@ -50,12 +50,21 @@ osc_refs <- function(session, orgs=2820) {
         orgrefs <- read_osc_refs(session, orgs)
         osc.cache$put(cache_key, orgrefs)
     }
+    before <- nrow(orgrefs)
     orgrefs.registered <- 
         left_join(orgrefs, referee_database(), by="ID") |>
         mutate(Registered.2021=falseIfNA(reg.21),
-               Registered.2022=falseIfNA(reg.22)) |>
-        filter(ID != '')
-    
+               Registered.2022=falseIfNA(reg.22)) 
+    # I used to filter out refs who joined the org but whose registration had not come through so
+    # I'm not doing that anymore:
+    #    filter(ID != '')
+    # This would print out the names of those refs:
+    unregistered <- nrow(orgrefs)-nrow(orgrefs.registered)
+    if (unregistered > 0) {
+        warning("There are ", unregistered, " refs who were removed because there is no registration for them: ",
+                str_c(setdiff(orgrefs$FullName, orgrefs.registered$FullName), collapse = ', '))
+        
+    }
     return (
         orgrefs.registered |>
             select(ID, UID, LastName, FirstName, FullName, Age, Gender, City, LastLogin, Registered.2021, Registered.2022, 

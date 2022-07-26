@@ -76,7 +76,7 @@ organizations <- function(session) {
 # Execute a search for games in which the session user was assigned.  
 # Return a vector of game ids
 all_game_ids <- function(session, orgs){
-    page_size <- 1000
+    page_size <- 250
     game_search <- session_jump_to(session, "https://www.oregonsoccercentral.com/OSICORE/game/assignment.php")
     search_form <- html_form(game_search)[[1]] |>
         html_form_set(selOrgID=str_c(sort(orgs), collapse=','),
