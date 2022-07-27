@@ -211,24 +211,29 @@ arrange(refs, desc(Total)) |>
 These are all the refs that did at least one game in Spring of '22.
 
 ```{r spring22}
-season_summary(session, begin_date=mdy("3/1/2022"), end_date=mdy("6/14/2022")) |>
+spring22 <- season_summary(session, begin_date=mdy("3/1/2022"), end_date=mdy("6/14/2022")) |>
     arrange(desc(Total)) |>
     filter(Total > 0) |>
-    mutate(Rank = str_c(Rank.Center, '/', Rank.AR)) |>
-    select(Total,
-           Center,
-           AR,
-           FullName,
-           Age,
-           Gender,
-           City,
-           Rank) |>
+    mutate(Rank = str_c(Rank.Center, '/', Rank.AR)) 
+select(spring22,
+       Total,
+       Center,
+       AR,
+       FullName,
+       Age,
+       Gender,
+       City,
+       Rank) |>
     kbl() |>
     kable_styling(bootstrap_options = c("striped", "hover"), full_width = T) 
 
 
 ```
 
+```{r seasonstats}
+
+
+```
 ## Distribution Lists
 
 ### Refs That Might Be Interested in Training
@@ -267,8 +272,8 @@ select(refs.training,
 These are refs who are registered, have Centered 9v9 or above, and have done at least 1 game in 2021
 
 ```{r centersneeded}
-immediate.centers <- filter(refs.current, 
-                            LastYear >= 2021 & Center > 0) |>
+immediate.centers <- filter(refs, 
+                            Registered.2022 & LastYear >= 2021 & Center > 0) |>
     arrange(desc(Center.11v11), desc(Center.9v9), desc(Center.7v7)) 
 
 select(immediate.centers,
@@ -293,8 +298,8 @@ select(immediate.centers,
 ### Need ARs for Upcoming Games
 
 ```{r need-ars}
-immediate.ars <- filter(refs.current, 
-                        LastYear >= 2021 &  !(UID %in% immediate.centers$UID)) |>
+immediate.ars <- filter(refs, 
+                        Registered.2022 & LastYear >= 2021 &  !(UID %in% immediate.centers$UID)) |>
     arrange(desc(AR)) 
 
 select(immediate.ars,
