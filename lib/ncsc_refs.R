@@ -111,6 +111,7 @@ season_summary <- function(session, begin_date=mdy("1/1/2010"), end_date = Sys.D
                      values_to="UID") |>
         mutate(Year=year(Date), Years=year(Date)) |>
         filter(!is.na(UID) & Date >= begin_date & Date <= end_date) |>
+        mutate(rownum = row_number()) |>
         pivot_wider(names_from=Years, values_from=Years, values_fn=length, names_prefix='GamesIn', values_fill=0) |>
         group_by(UID) |>
         summarize(
