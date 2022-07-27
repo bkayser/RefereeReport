@@ -3,8 +3,9 @@ library(rvest)
 
 # Return the spreadsheet DB of referees
 referee_database.2022 <- function() {
+    latest_file <- system("ls -1t data/Active*.xlsx", intern=TRUE) |> first()
     return(
-        readxl::read_xlsx("data/Active Referees - July 12.xlsx") |>
+        readxl::read_xlsx(latest_file) |>
             select(ID=`USSF-Id`) |>
             unique() |>
             mutate(reg.22=T)

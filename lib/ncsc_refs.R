@@ -105,7 +105,7 @@ read_games <- function(session, org=2820) {
 
 season_summary <- function(session, begin_date=mdy("1/1/2010"), end_date = Sys.Date()) {
     
-    refs <- read_games(session) |>
+    games <- read_games(session) |>
         pivot_longer(all_of(c('Center', 'AR1', 'AR2')),
                      names_to="Position",
                      values_to="UID") |>
@@ -133,7 +133,7 @@ season_summary <- function(session, begin_date=mdy("1/1/2010"), end_date = Sys.D
         right_join(x=osc_refs(session), by='UID') |>  # read_refs returns refs currently in the org
         filter(ID != "") |>
         mutate(across(!(1:23), \(v) ifelse(is.na(v), 0, v)))  # Write zeros into all the NAs introduced in the join.
-    return(refs)
+    return(games)
 }
 
 # This will do a bulk update of the refs in the table using:
